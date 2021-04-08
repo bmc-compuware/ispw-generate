@@ -1,0 +1,25 @@
+{
+  "name": "ispw-generate",
+  "version": "1.0.0",
+  "description": "Repository for the ISPW generate action source",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build index.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Compuware-ISPW/ispw-generate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Compuware-ISPW/ispw-generate/issues"
+  },
+  "homepage": "https://github.com/Compuware-ISPW/ispw-generate#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}
