@@ -1,10 +1,40 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'ispw-generate'
+description: 'Run a generate in ISPW'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  cesUrl:
+    description: 'The URL to send requests to.'
     required: true
-    default: 'World'
+  cesToken:
+    description: 'The token to use when connecting to ISPW through CES'
+    required: true
+  runtimeConfiguration: # ISPW runtime config
+    description: 'the runtime configuration used when connecting to ISPW'
+    required: false
+    default: ''
+  assignmentId: 
+    description: 'The container for which you intend to generate tasks.'
+    required: false
+  level: 
+    description: 'The level that the tasks exist at in the assignment'
+    required: false
+  taskId:
+    description: 'The comma-separated list of task IDs for the tasks that need to be generated'
+    required: false
+  generateAutomatically:
+    description: 'The request parameters for the generate will come from a file written to a local directory. This option is only valid when used in combination with a Git to ISPW Integration step'
+    required: false
+  changeType: 
+    description: 'S for standard, I for incidental, or E for emergency. Default value of S'
+    required: false
+    default: 'S'
+  executionStatus:
+    description: 'I for immediate execution or at start date/time, H to create request in hold'
+    required: false
+    default: 'I'
+  autoDeploy:
+    description: 'Generates can be set up to automatically Deploy as well by an option set up by the ISPW. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through ISPW, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
+    required: false
+    default: 'false'
 outputs:
   time: # id of output
     description: 'The time we greeted you'

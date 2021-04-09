@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ncc build index.js -o dist"
+    "build": "ncc build index.js -o dist",
+    "prepublish": "npm run lint && npm run build",
+    "lint": "npx eslint ./*.js --fix"
   },
   "repository": {
     "type": "git",
@@ -21,5 +23,9 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
