@@ -5893,32 +5893,26 @@ function wrappy (fn, cb) {
 
 const fs = __nccwpck_require__(747);
 
-function BuildParms(containerId, releaseId, taskLevel, taskIds) {
-  this.containerId = containerId;
-  this.releaseId = releaseId;
-  this.taskLevel = taskLevel;
-  this.taskIds = taskIds;
-}
-
-function getParmsFromFile(parmFileLocation) {
-  let buildParms;
-  let buildParmsStr = getFileContentsStr(parmFileLocation)
-  if (buildParmsStr !== null && buildParmsStr !== undefined && buildParmsStr !== '') {
-    console.log('converting buildParms string: ' + buildParmsStr);
-    buildParms = JSON.parse(buildParmsStr);
-    buildParms = Object.assign(new BuildParms(), buildParms);
-    console.log(buildParms.containerId);
-    console.log(buildParms.taskIds);
-  }
-  return buildParms;
-}
-
 function getFileContentsStr(parmFileLocation) {
   let buildParmsStr;
   if (fs.existsSync(parmFileLocation)) {
     buildParmsStr = fs.readFileSync(parmFileLocation, 'utf8');
   }
   return buildParmsStr
+}
+
+function getParmsFromFile(parmFileLocation) {
+  let buildParms;
+  console.log('hello');
+  let buildParmsStr = getFileContentsStr(parmFileLocation)
+  console.log('getParmsFromFile:::');
+  if (buildParmsStr !== null && buildParmsStr !== undefined && buildParmsStr !== '') {
+    console.log('converting buildParms string: ' + buildParmsStr);
+    buildParms = JSON.parse(buildParmsStr);
+    console.log(buildParms.containerId);
+    console.log(buildParms.taskIds);
+  }
+  return buildParms;
 }
 
 function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
@@ -5939,7 +5933,6 @@ function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
 module.exports = getParmsFromFile;
 module.exports = getParmsFromInputs;
 module.exports = getFileContentsStr;
-module.exports = BuildParms;
 
 
 
