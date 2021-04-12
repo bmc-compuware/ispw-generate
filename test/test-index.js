@@ -10,75 +10,58 @@ describe('Testing index.js', function () {
     });
   });
 
-  describe('#getParmsFileStringContents(parmFileLocation)', async function () {
-    await it('should return empty string', async function () {
+  describe('#getParmsFileStringContents(parmFileLocation)', function () {
+    it('should return empty string', function () {
       let pathName = __dirname + '/workspace/testEmpty.txt';
       pathName = path.normalize(pathName);
-      fs.open(pathName, 'w', function (err) {
-        if (err) {
-          return console.error(err);
-        }
-
-        fs.writeFileSync(pathName,  '');
-
-      });
-      var getParmsFileStringContents = require('../src/utilities');
-      let buildParms = await getParmsFileStringContents(pathName);
+      fs.writeFileSync(pathName,  '');
+      var getFileContentsStr = require('../src/utilities');
+      let buildParms = getFileContentsStr(pathName);
       assert.strictEqual(buildParms, '');
     });
 
 
-    await it('should return abc', async function () {
+    it('should return abc', function () {
       let pathName = __dirname + '/workspace/testABC.txt';
       pathName = path.normalize(pathName);
-      console.log('pathName: ' + pathName);
-      fs.open(pathName, 'w', function (err) {
-        if (err) {
-          return console.error(err);
-        }
-        
-        fs.writeFileSync(pathName,  'abc');
-
-      });
-      var getParmsFileStringContents = require('../src/utilities');
-      let buildParms = await getParmsFileStringContents(pathName);
+      fs.writeFileSync(pathName, 'abc');
+      var getFileContentsStr = require('../src/utilities');
+      let buildParms = getFileContentsStr(pathName);
       assert.strictEqual(buildParms, 'abc');
     });
   });
 
-  describe('#getParmsFromFile(parmFileLocation)', async function () {
-    await it('should return empty buildparms', async function () {
-      fs.open(__dirname + '/workspace/automaticBuildParams.txt', 'w', function (err) {
-        if (err) {
-          return console.error(err);
-        }
-
-        fs.writeFileSync(__dirname + '/workspace/automaticBuildParams.txt',  JSON.stringify(undefined));
-
-      });
+  describe('#getParmsFromFile(parmFileLocation)', function () {
+    it('should return empty buildparms', function () {
+      let pathName = __dirname + '/workspace/automaticBuildParams.txt';
+      pathName = path.normalize(pathName);
+      fs.writeFileSync(pathName, JSON.stringify({}));
       var getParmsFromFile = require('../src/utilities');
-      let buildParms = await getParmsFromFile(__dirname + '/workspace/automaticBuildParams.txt');
+      let buildParms = getParmsFromFile(pathName);
+      assert.strictEqual(buildParms, {});
+    });
+
+    it('should return undefined', function () {
+      let pathName = __dirname + '/workspace/automaticBuildParams.txt';
+      pathName = path.normalize(pathName);
+      fs.writeFileSync(pathName, '');
+      var getParmsFromFile = require('../src/utilities');
+      let buildParms = getParmsFromFile(pathName);
       assert.strictEqual(buildParms, undefined);
     });
 
-    await it('should return buildParms object with fields filled in', async function () {
-      fs.open(__dirname + '/workspace/automaticBuildParams.txt', 'w', function (err) {
-        if (err) {
-          return console.error(err);
-        }
+    it('should return buildParms object with fields filled in', function () {
 
-        fs.writeFileSync(__dirname + '/workspace/automaticBuildParams.txt',
-          JSON.stringify({
-            containerId: 'PLAY003736',
-            releaseId: ' ',
-            taskLevel: 'DEV1',
-            taskIds: ['7E45E3087494']
-          }));
-
-
-      });
+      let pathName = __dirname + '/workspace/automaticBuildParams.txt';
+      pathName = path.normalize(pathName);
+      fs.writeFileSync(pathName, JSON.stringify({
+        containerId: 'PLAY003736',
+        releaseId: ' ',
+        taskLevel: 'DEV1',
+        taskIds: ['7E45E3087494']
+      }));
       var getParmsFromFile = require('../src/utilities');
-      let buildParms = await getParmsFromFile(__dirname + '/workspace/automaticBuildParams.txt');
+      let buildParms = getParmsFromFile(pathName);
       assert.strictEqual(buildParms, {
         containerId: 'PLAY003736',
         releaseId: ' ',

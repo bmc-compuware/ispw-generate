@@ -1,18 +1,21 @@
 const fs = require('fs');
 
-async function getParmsFromFile(parmFileLocation) {
+function getParmsFromFile(parmFileLocation) {
   let buildParms;
-  let buildParmsStr = await getFileContentsStr(parmFileLocation)
+  let buildParmsStr = getFileContentsStr(parmFileLocation)
   if (buildParmsStr !== null && buildParmsStr !== undefined && buildParmsStr !== '') {
+    console.log('converting buildParms string: ' + buildParmsStr);
     buildParms = JSON.parse(buildParmsStr);
+    console.log(buildParms.containerId);
+    console.log(buildParms.taskIds);
   }
   return buildParms;
 }
 
-async function getFileContentsStr(parmFileLocation) {
+function getFileContentsStr(parmFileLocation) {
   let buildParmsStr;
   if (fs.existsSync(parmFileLocation)) {
-    buildParmsStr = await fs.readFileSync(parmFileLocation, 'utf8');
+    buildParmsStr = fs.readFileSync(parmFileLocation, 'utf8');
   }
   return buildParmsStr
 }
@@ -35,7 +38,6 @@ function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
 module.exports = getParmsFromFile;
 module.exports = getParmsFromInputs;
 module.exports = getFileContentsStr;
-
 
 
 
