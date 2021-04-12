@@ -5888,6 +5888,137 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 705:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const fs = __nccwpck_require__(747);
+
+function getParmsFromFile(parmFileLocation) {
+  let buildParms;
+  let buildParmsStr = getFileContentsStr(parmFileLocation)
+  if (buildParmsStr !== null && buildParmsStr !== undefined && buildParmsStr !== '') {
+    buildParms = JSON.parse(buildParmsStr);
+  }
+  return buildParms;
+}
+
+async function getFileContentsStr(parmFileLocation) {
+  let buildParmsStr;
+  if (fs.existsSync(parmFileLocation)) {
+    buildParmsStr = fs.readFileSync(parmFileLocation, 'utf8');
+  }
+  return buildParmsStr
+}
+
+function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
+  let buildParms = {};
+  if (inputAssignment !== null && inputAssignment !== undefined && inputAssignment !== '') {
+    buildParms.containerId = inputAssignment;
+  }
+
+  if (inputLevel !== null && inputLevel !== undefined && inputLevel !== '') {
+    buildParms.taskLevel = inputLevel;
+  }
+
+  if (inputTaskId !== null && inputTaskId !== undefined && inputTaskId !== '') {
+    buildParms.taskIds = inputTaskId.split(',');
+  }
+  return buildParms;
+}
+module.exports = getParmsFromFile;
+module.exports = getParmsFromInputs;
+module.exports = getFileContentsStr;
+
+
+
+
+
+
+
+
+
+/**
+ * Build parms have the following fields:
+ * String containerId
+ * String releaseId
+ * String taskLevel
+ * ArrayList<String> taskIds
+ */
+// const getParmsFromFile = (parmFileLocation) => {
+//   let buildParms;
+//   if (fs.existsSync(parmFileLocation)) {
+//     let buildParmsStr = fs.readFileSync(parmFileLocation, 'utf8');
+//     if (buildParmsStr !== null && buildParmsStr !== undefined && buildParmsStr !== '') {
+//       buildParms = JSON.parse(buildParmsStr);
+//     }
+//   }
+//   return buildParms;
+// };
+
+// const getParmsFromInputs = (inputAssignment, inputLevel, inputTaskId) => {
+//   let buildParms = {};
+//   if (inputAssignment !== null && inputAssignment !== undefined && inputAssignment !== '') {
+//     buildParms.containerId = inputAssignment;
+//   }
+
+//   if (inputLevel !== null && inputLevel !== undefined && inputLevel !== '') {
+//     buildParms.taskLevel = inputLevel;
+//   }
+
+//   if (inputTaskId !== null && inputTaskId !== undefined && inputTaskId !== '') {
+//     buildParms.taskIds = inputTaskId.split(',');
+//   }
+//   return buildParms;
+// };
+
+// const validateBuildParms = (buildParms) => {
+//   let isValid = true;
+//   if (buildParms.containerId === null || buildParms.containerId === undefined || buildParms.containerId === '') {
+//     isValid = false;
+//     console.error('An assignment ID must be specified.')
+//   }
+
+//   if (buildParms.taskLevel === null || buildParms.taskLevel === undefined || buildParms.taskLevel === '') {
+//     isValid = false;
+//     console.error('A level must be specified.')
+//   }
+
+//   if (buildParms.taskIds === null || buildParms.taskIds === undefined || buildParms.taskIds === '') {
+//     isValid = false;
+//     console.error('A list of task IDs must be specified.')
+//   }
+//   return isValid;
+// };
+
+// const convertObjectToJson = (data) => {
+//   return JSON.stringify(data);
+// };
+
+// const assembleRequestUrl = (CESUrl, buildParms) => {
+//   let url = CESUrl.concat('/ispw/ISPW/assignments/', buildParms.containerId);
+//   url = url.concat('/taskIds/generate-await');
+//   return url;
+// };
+
+// const sendGeneratePOSTRequest = (CESUrl, token, requestBody) => {
+//   const xhr = new XMLHttpRequest();
+//   xhr.withCredentials = true;
+
+//   xhr.addEventListener('readystatechange', function () {
+//     if (this.readyState === this.DONE) {
+//       console.log(this.responseText);
+//     }
+//   });
+
+//   xhr.open('POST', assembleRequestUrl(CESUrl, buildParms));
+//   xhr.setRequestHeader('content-type', 'application/json');
+//   xhr.setRequestHeader('authorization', token);
+
+//   xhr.send(requestBody);
+// };
+
+/***/ }),
+
 /***/ 362:
 /***/ ((module) => {
 
@@ -6033,26 +6164,102 @@ module.exports = require("zlib");;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
-const core = __nccwpck_require__(694);
-const github = __nccwpck_require__(721);
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(694);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(721);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(747);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var Utilities = __nccwpck_require__(705);
+
+//const core = require('@actions/core');
+//const github = require('@actions/github');
+//const fs = require('fs');
+//const utilities = require('./src/utilities');
 
 try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
+  let buildParms;
+  if (_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('generateAutomatically') === 'true') {
+    buildParms = Utilities.getParmsFromFile(parmFileLocation);
+  }
+  else {
+    let inputAssignment = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('assignmentId');
+    let inputLevel = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('level');
+    let inputTaskId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('taskId');
+    buildParms = Utilities.getParmsFromInputs(inputAssignment, inputLevel, inputTaskId);
+  }
+
+  if (buildParms === null || buildParms === undefined/* || !validateBuildParms(buildParms)*/) {
+    throw new InvalidArgumentException('Inputs required for ispw-generate are missing.');
+  }
+
+  // get CES request body
+
+  // send CES request
+
+  let time = (new Date()).toTimeString();
+  _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('time', time);
   // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
+  const payload = JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload, undefined, 2);
   console.log(`The event payload: ${payload}`);
 } catch (error) {
-  core.setFailed(error.message);
+  _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+}
+
+function InvalidArgumentException(message) {
+  this.message = message;
+  this.name = 'InvalidArgumentException';
 }
 })();
 

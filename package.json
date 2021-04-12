@@ -2,12 +2,12 @@
   "name": "ispw-generate",
   "version": "1.0.0",
   "description": "Repository for the ISPW generate action source",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ncc build index.js -o dist",
     "prepublish": "npm run lint && npm run build",
-    "lint": "npx eslint ./*.js --fix"
+    "lint": "npx eslint ./**.js --fix",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -22,10 +22,13 @@
   "homepage": "https://github.com/Compuware-ISPW/ispw-generate#readme",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "^7.23.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "esm": "^3.2.25",
+    "mocha": "^8.3.2"
   }
 }

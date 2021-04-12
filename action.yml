@@ -7,10 +7,9 @@ inputs:
   cesToken:
     description: 'The token to use when connecting to ISPW through CES'
     required: true
-  runtimeConfiguration: # ISPW runtime config
+  runtimeConfiguration:
     description: 'the runtime configuration used when connecting to ISPW'
     required: false
-    default: ''
   assignmentId: 
     description: 'The container for which you intend to generate tasks.'
     required: false
@@ -25,15 +24,15 @@ inputs:
     required: false
   changeType: 
     description: 'S for standard, I for incidental, or E for emergency. Default value of S'
-    required: false
+    required: true
     default: 'S'
   executionStatus:
     description: 'I for immediate execution or at start date/time, H to create request in hold'
-    required: false
+    required: true
     default: 'I'
   autoDeploy:
     description: 'Generates can be set up to automatically Deploy as well by an option set up by the ISPW. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through ISPW, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
-    required: false
+    required: true
     default: 'false'
 outputs:
   time: # id of output
