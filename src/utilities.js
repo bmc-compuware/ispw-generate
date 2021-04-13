@@ -32,75 +32,37 @@ function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
   }
   return buildParms;
 }
-module.exports = {
-  getParmsFromFile: getParmsFromFile,
-  getParmsFromInputs: getParmsFromInputs,
-  getFileContentsStr: getFileContentsStr
+
+function validateBuildParms(buildParms) {
+  let isValid = true;
+  if (buildParms.containerId === null || buildParms.containerId === undefined || buildParms.containerId === '') {
+    isValid = false;
+    console.error('An assignment ID must be specified.')
+  }
+
+  if (buildParms.taskLevel === null || buildParms.taskLevel === undefined || buildParms.taskLevel === '') {
+    isValid = false;
+    console.error('A level must be specified.')
+  }
+
+  if (buildParms.taskIds === null || buildParms.taskIds === undefined || buildParms.taskIds.length === 0) {
+    isValid = false;
+    console.error('A list of task IDs must be specified.')
+  }
+  return isValid;
 }
 
+function convertObjectToJson(data) {
+  return JSON.stringify(data);
+}
 
-
-
-
-
-
-
-/**
- * Build parms have the following fields:
- * String containerId
- * String releaseId
- * String taskLevel
- * ArrayList<String> taskIds
- */
-// const getParmsFromFile = (parmFileLocation) => {
-//   let buildParms;
-//   if (fs.existsSync(parmFileLocation)) {
-//     let buildParmsStr = fs.readFileSync(parmFileLocation, 'utf8');
-//     if (buildParmsStr !== null && buildParmsStr !== undefined && buildParmsStr !== '') {
-//       buildParms = JSON.parse(buildParmsStr);
-//     }
-//   }
-//   return buildParms;
-// };
-
-// const getParmsFromInputs = (inputAssignment, inputLevel, inputTaskId) => {
-//   let buildParms = {};
-//   if (inputAssignment !== null && inputAssignment !== undefined && inputAssignment !== '') {
-//     buildParms.containerId = inputAssignment;
-//   }
-
-//   if (inputLevel !== null && inputLevel !== undefined && inputLevel !== '') {
-//     buildParms.taskLevel = inputLevel;
-//   }
-
-//   if (inputTaskId !== null && inputTaskId !== undefined && inputTaskId !== '') {
-//     buildParms.taskIds = inputTaskId.split(',');
-//   }
-//   return buildParms;
-// };
-
-// const validateBuildParms = (buildParms) => {
-//   let isValid = true;
-//   if (buildParms.containerId === null || buildParms.containerId === undefined || buildParms.containerId === '') {
-//     isValid = false;
-//     console.error('An assignment ID must be specified.')
-//   }
-
-//   if (buildParms.taskLevel === null || buildParms.taskLevel === undefined || buildParms.taskLevel === '') {
-//     isValid = false;
-//     console.error('A level must be specified.')
-//   }
-
-//   if (buildParms.taskIds === null || buildParms.taskIds === undefined || buildParms.taskIds === '') {
-//     isValid = false;
-//     console.error('A list of task IDs must be specified.')
-//   }
-//   return isValid;
-// };
-
-// const convertObjectToJson = (data) => {
-//   return JSON.stringify(data);
-// };
+module.exports = {
+  getParmsFromFile,
+  getParmsFromInputs,
+  getFileContentsStr,
+  validateBuildParms,
+  convertObjectToJson
+}
 
 // const assembleRequestUrl = (CESUrl, buildParms) => {
 //   let url = CESUrl.concat('/ispw/ISPW/assignments/', buildParms.containerId);
