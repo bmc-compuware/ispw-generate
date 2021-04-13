@@ -7,6 +7,9 @@ inputs:
   cesToken:
     description: 'The token to use when connecting to ISPW through CES'
     required: true
+  srid:
+    description: 'The ID for the instance of ISPW to connect to'
+    required: true
   runtimeConfiguration:
     description: 'the runtime configuration used when connecting to ISPW'
     required: false
