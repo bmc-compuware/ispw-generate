@@ -5,8 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "ncc build index.js -o dist",
-    "prepublish": "npm run lint && npm run build",
-    "lint": "npx eslint ./**.js --fix",
+    "lint": "npx eslint ./**.js ./src/**.js --fix",
     "test": "mocha"
   },
   "repository": {

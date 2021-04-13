@@ -1,3 +1,10 @@
+/**
+* ALL BMC SOFTWARE PRODUCTS LISTED WITHIN THE MATERIALS ARE TRADEMARKS OF BMC SOFTWARE, INC. ALL OTHER COMPANY PRODUCT NAMES
+* ARE TRADEMARKS OF THEIR RESPECTIVE OWNERS.
+*
+* (c) Copyright 2021 BMC Software, Inc.
+* This code is licensed under MIT license (see LICENSE.txt for details)
+*/
 const chai = require('chai');
 var assert = chai.assert;
 const fs = require('fs');
@@ -138,6 +145,18 @@ describe('Testing index.js', function () {
       var utils = require('../src/utilities.js');
       let buildParms = {};
       let output = utils.validateBuildParms(buildParms);
+      assert.isFalse(output);
+    });
+
+    it('should return false - buildParms are null', function () {
+      var utils = require('../src/utilities.js');
+      let output = utils.validateBuildParms(null);
+      assert.isFalse(output);
+    });
+
+    it('should return false - buildParms are undefined', function () {
+      var utils = require('../src/utilities.js');
+      let output = utils.validateBuildParms(undefined);
       assert.isFalse(output);
     });
 
@@ -390,7 +409,5 @@ describe('Testing index.js', function () {
       assert.strictEqual(output.autoDeploy, false);
     });
   });
-
-
 
 });
