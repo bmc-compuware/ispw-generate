@@ -6,7 +6,8 @@
   "scripts": {
     "build": "ncc build index.js -o dist",
     "lint": "npx eslint ./**.js ./src/**.js --fix",
-    "test": "mocha"
+    "test": "nyc --all=true --exclude=\"dist/**\" --exclude=\"coverage/**\" --exclude=\"test/**\" --reporter=json --reporter=text mocha",
+    "coverage": "nyc check-coverage --lines 55 --branches 75 --statements 55 --functions 55"
   },
   "repository": {
     "type": "git",
@@ -22,13 +23,15 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
-    "path": "^0.12.7"
+    "https": "^1.0.0",
+    "path": "^0.12.7",
   },
   "devDependencies": {
     "chai": "^4.3.4",
     "eslint": "^7.23.0",
     "eslint-config-google": "^0.14.0",
     "esm": "^3.2.25",
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0"
   }
 }

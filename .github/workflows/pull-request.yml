@@ -1,0 +1,27 @@
+name: pull-request-checks
+on: [pull_request]
+jobs:
+  compile:
+    name: Compiling Source
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Build
+        run: npm run build
+      
+      - name: Run Tests
+        run: npm run test
+
+      - name: Check Code Coverage
+        run: npm run coverage

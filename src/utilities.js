@@ -6,6 +6,7 @@
 * This code is licensed under MIT license (see LICENSE.txt for details)
 */
 const fs = require('fs');
+const https = require('https');
 
 /**
  * Reads the file from the given path and returns the contents as a string
@@ -113,7 +114,7 @@ function convertObjectToJson(data) {
  * @param  {string} srid the SRID for this ISPW
  * @param  {BuildParms} buildParms the BuildParms object with all the fields
  * filled in
- * @return {string} the url for the request
+ * @return {URL} the url for the request
  */
 function assembleRequestUrl(cesUrl, srid, buildParms) {
   // remove 'compuware' from url, if it exists
@@ -135,12 +136,14 @@ function assembleRequestUrl(cesUrl, srid, buildParms) {
     cesUrl = cesUrl.substr(0, cesUrl.length - 1);
   }
 
-  let url = cesUrl.concat('/ispw/', srid, '/assignments/');
-  url = url.concat(buildParms.containerId, '/taskIds/generate-await?');
+  let tempUrlStr = cesUrl.concat(`/ispw/${srid}/assignments/`);
+  tempUrlStr = tempUrlStr.concat(buildParms.containerId, '/taskIds/generate-await?');
   buildParms.taskIds.forEach((id) => {
-    url = url.concat('taskId=' + id + '&');
+    tempUrlStr = tempUrlStr.concat(`taskId=${id}&`);
   });
-  url = url.concat('level=' + buildParms.taskLevel);
+  tempUrlStr = tempUrlStr.concat(`level=${buildParms.taskLevel}`);
+
+  const url = new URL(tempUrlStr);
   return url;
 }
 
@@ -186,25 +189,41 @@ function assembleRequestBodyObject(runtimeConfig, changeType,
 
 /**
  * Creates an XMLHttpRequest and sends a POST request.
- * @param  {string} cesUrl the URL to send the request to
+ * @param  {URL} cesUrl the URL to send the request to
  * @param  {string} token the token to use for authentication
  * @param  {string} requestBody the request body string
  */
 function sendPOSTRequest(cesUrl, token, requestBody) {
-  const xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
-
-  xhr.addEventListener('readystatechange', function() {
-    if (this.readyState === this.DONE) {
-      console.log(this.responseText);
+  const options = {
+    hostname: cesUrl.hostname,
+    port: cesUrl.port,
+    path: cesUrl.pathname + cesUrl.search,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(requestBody),
+      authorization: token
     }
+  }
+  const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`)
+    var data = '';
+    res.on('data', function (chunk) {
+     data += chunk;
+    });
+    res.on('end', function () {
+     data = JSON.parse(data);
+     console.log(data);
+    });
+  });
+  console.log(req.getHeaders());
+  req.on('error', error => {
+    console.error(error)
   });
 
-  xhr.open('POST', assembleRequestUrl(cesUrl, buildParms));
-  xhr.setRequestHeader('content-type', 'application/json');
-  xhr.setRequestHeader('authorization', token);
+  req.write(requestBody);
+  req.end();
 
-  xhr.send(requestBody);
 }
 
 module.exports = {
