@@ -11,6 +11,9 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v2
 
+      - name: Install ncc
+        run: npm i -g @vercel/ncc
+
       - name: Install Dependencies
         run: npm install
 
