@@ -15,6 +15,12 @@ describe('Testing index.js', function () {
 
   describe('#getParmsFileStringContents(parmFileLocation)', function () {
     this.timeout(25000);
+    this.beforeAll(function () {
+      var dir = __dirname + '/workspace';
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    })
     it('should return empty string', function () {
       let pathName = __dirname + '/workspace/testEmpty.txt';
       pathName = path.normalize(pathName);
@@ -37,6 +43,12 @@ describe('Testing index.js', function () {
 
   describe('#getParmsFromFile(parmFileLocation)', function () {
     this.timeout(25000);
+    this.beforeAll(function () {
+      var dir = __dirname + '/workspace';
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    })
     it('should return empty buildparms', function () {
       let pathName = __dirname + '/workspace/automaticBuildParams.txt';
       pathName = path.normalize(pathName);
