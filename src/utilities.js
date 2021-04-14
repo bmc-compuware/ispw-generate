@@ -1,6 +1,7 @@
 /**
-* ALL BMC SOFTWARE PRODUCTS LISTED WITHIN THE MATERIALS ARE TRADEMARKS OF BMC SOFTWARE, INC. ALL OTHER COMPANY PRODUCT NAMES
-* ARE TRADEMARKS OF THEIR RESPECTIVE OWNERS.
+* ALL BMC SOFTWARE PRODUCTS LISTED WITHIN THE MATERIALS ARE TRADEMARKS OF BMC
+* SOFTWARE, INC. ALL OTHER COMPANY PRODUCT NAMES ARE TRADEMARKS OF THEIR
+* RESPECTIVE OWNERS.
 *
 * (c) Copyright 2021 BMC Software, Inc.
 * This code is licensed under MIT license (see LICENSE.txt for details)
@@ -137,7 +138,8 @@ function assembleRequestUrl(cesUrl, srid, buildParms) {
   }
 
   let tempUrlStr = cesUrl.concat(`/ispw/${srid}/assignments/`);
-  tempUrlStr = tempUrlStr.concat(buildParms.containerId, '/taskIds/generate-await?');
+  tempUrlStr = tempUrlStr.concat(buildParms.containerId);
+  tempUrlStr = tempUrlStr.concat('/taskIds/generate-await?');
   buildParms.taskIds.forEach((id) => {
     tempUrlStr = tempUrlStr.concat(`taskId=${id}&`);
   });
@@ -202,28 +204,27 @@ function sendPOSTRequest(cesUrl, token, requestBody) {
     headers: {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(requestBody),
-      authorization: token
-    }
-  }
-  const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-    var data = '';
-    res.on('data', function (chunk) {
-     data += chunk;
+      'authorization': token,
+    },
+  };
+  const req = https.request(options, (res) => {
+    console.log(`statusCode: ${res.statusCode}`);
+    let data = '';
+    res.on('data', function(chunk) {
+      data += chunk;
     });
-    res.on('end', function () {
-     data = JSON.parse(data);
-     console.log(data);
+    res.on('end', function() {
+      data = JSON.parse(data);
+      console.log(data);
     });
   });
   console.log(req.getHeaders());
-  req.on('error', error => {
-    console.error(error)
+  req.on('error', (error) => {
+    console.error(error);
   });
 
   req.write(requestBody);
   req.end();
-
 }
 
 module.exports = {

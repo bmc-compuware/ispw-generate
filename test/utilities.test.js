@@ -14,7 +14,7 @@ const path = require('path');
 describe('Testing index.js', function () {
 
   describe('#getParmsFileStringContents(parmFileLocation)', function () {
-    this.timeout(5000);
+    this.timeout(25000);
     it('should return empty string', function () {
       let pathName = __dirname + '/workspace/testEmpty.txt';
       pathName = path.normalize(pathName);
@@ -36,7 +36,7 @@ describe('Testing index.js', function () {
   });
 
   describe('#getParmsFromFile(parmFileLocation)', function () {
-    this.timeout(5000);
+    this.timeout(25000);
     it('should return empty buildparms', function () {
       let pathName = __dirname + '/workspace/automaticBuildParams.txt';
       pathName = path.normalize(pathName);
