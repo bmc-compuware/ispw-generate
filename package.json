@@ -24,7 +24,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "https": "^1.0.0",
-    "path": "^0.12.7",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "chai": "^4.3.4",

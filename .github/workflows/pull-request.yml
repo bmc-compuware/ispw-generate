@@ -1,8 +1,8 @@
 name: pull-request-checks
 on: [pull_request]
 jobs:
-  compile:
-    name: Compiling Source
+  build:
+    name: Building action and running tests
     runs-on: windows-latest
     steps:
       - name: Checkout Source
