@@ -52,7 +52,7 @@ Steps to move the current version tag to the latest commit in the main branch:
 6. `git push -f origin release/v1` - force pushes the branch to the remote
 7. `git push origin :refs/tags/v1` - deletes the current 'v1' tag from the remote
 8. `git tag -fa v1 -m "v1"` - adds a new 'v1' tag to the latest commit (done in step 5)
-9.  `git push origin v1` - pushes the new tag to the remote
+9. `git push origin v1` - pushes the new tag to the remote
 
 ### Publishing a new version
 
