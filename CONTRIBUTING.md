@@ -28,7 +28,13 @@ This repository uses ESLint to enforce standard JavaScript style guidelines. Kee
 
 ### Manually testing changes
 
-// TODO
+In order to manually test changes, follow these steps
+
+1. If you do not already have one, set up a new **private** repository in the Compuware-ISPW GitHub organization
+2. In the ispw-generate repository you have checked out locally, run `npm run build`. This will generate a new `index.js` file in the `dist` directory
+3. Commit all of your action changes (including the generated index.js file) to a branch in the ispw-generate repository
+4. In your private repository, create a workflow script in the `.github/workflows` folder. You can choose to pass in hardcoded values, or create a separate step to handle the sync and use the output from that step (see the examples in the README). When referencing the ispw-generate action, you should use `Compuware-ISPW/ispw-generate@[your-branch-name]`
+5. Run your workflow from your private repository. If further code changes are required, repeat from Step 2.
 
 ### Preparing for code review
 
@@ -36,7 +42,7 @@ A job has been set up in GitHub to ensure that all merged code conforms to the s
 
 ## Publishing changes
 
-### Adding changes to the current published version
+### Adding changes to an existing tag
 
 Adding changes to the currently-published release is acceptable as long as the changes are backward-compatible with what is already published. Publishing changed under the same version that is already released has the benefit of users getting your changes without having to manually upgrade or change their workflow script.
 
@@ -54,7 +60,7 @@ Steps to move the current version tag to the latest commit in the main branch:
 8. `git tag -fa v1 -m "v1"` - adds a new 'v1' tag to the latest commit (done in step 5)
 9. `git push origin v1` - pushes the new tag to the remote
 
-### Publishing a new version
+### Creating a new tag
 
 Publishing a new version should be done when changes are made to an action that would require a user to upgrade their version and potentially modify their workflow script. For example, if new required fields are added to the action, a new version should be published.
 
@@ -70,3 +76,5 @@ Steps for publishing a new version:
 6. `git push -f origin release/v2` - force pushes the branch to the remote
 7. `git tag -fa v2 -m "v2"` - adds a new 'v2' tag to the latest commit (done in step 5)
 8. `git push origin v2` - pushes the new tag to the remote
+
+### Publishing a new release

@@ -96,7 +96,37 @@ jobs:
 
 ## Setup
 
-TODO
+### Create a token in CES
+
+In order to use this action, you must have an instance of the BMC Compuware CES product installed on one of your runners. Once that is complete, you will need to open CES in your web browser and create a token to be used during CES requests. To set up a new host connection, go to the hamburger menu in the upper left corner and select Host Connections.
+
+![CES menu](media/ces-menu.png "CES menu")
+
+On the Host Connection Settings page, click "Add." Set up the host connection to be used for ISPW and click OK when finished.
+
+Then, go back to the menu and select Security. On the Security page, click Add and the Personal Access Token dialog will come up.
+
+![CES token dialog](media/ces-token-dialog.png)
+
+On the Personal Access Token dialog, select the host that you want to create a token for, and enter in the mainframe username and password.
+
+Once done, there will be a new token in the table on the Security page
+
+![Security page](media/ces-token.png)
+
+### Save the token as a GitHub Secret
+
+From the Security page in CES, copy the token. In GitHub go to Settings > Secrets and click the button for New Repository Secret.
+
+![Secrets page](media/github-secrets-settings.png)
+
+On the New Secret page, paste the token that was copied earlier and click the Add secret button. Make a note of the name you give the secret so that you can easily use it in your workflow script.
+
+![Saving secret](media/github-saving-secret.png)
+
+### Fill in the workflow script
+
+Use the examples above to fill in a workflow script using the ispw-generate action. Note that if you want the input assignment, level, and taskIds to be automatically picked up from the ISPW synchronization with Git, you will need a synchronization step in you job, which will run before the generate.
 
 ### Developers
 

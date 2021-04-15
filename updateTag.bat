@@ -1,0 +1,1 @@
+git pull && git push origin :refs/tags/v1 && git tag -fa v1 -m "v1" && git push origin v1

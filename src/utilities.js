@@ -6,7 +6,29 @@
 * (c) Copyright 2021 BMC Software, Inc.
 * This code is licensed under MIT license (see LICENSE.txt for details)
 */
-const https = require('https');
+const http = require('http');
+
+/**
+ * Retrieves the action inputs from github core and returns them as a object
+ * @param {core} core
+ * @return {*} an object with all the input fields
+ * (whether they are defined or not)
+ */
+function retrieveInputs(core) {
+  return {
+    generateAutomatically: core.getInput('generate_automatically'),
+    assignmentId: core.getInput('assignment_id'),
+    level: core.getInput('level'),
+    taskId: core.getInput('task_id'),
+    cesUrl: core.getInput('ces_url'),
+    cesToken: core.getInput('ces_token'),
+    srid: core.getInput('srid'),
+    runtimeConfig: core.getInput('runtime_configuration'),
+    changeType: core.getInput('change_type'),
+    execStat: core.getInput('execution_status'),
+    autoDeploy: core.getInput('auto_deploy'),
+  };
+}
 
 /**
  * Reads the contents of the file at the given path and returns the contents as
@@ -174,50 +196,119 @@ function assembleRequestBodyObject(runtimeConfig, changeType,
 }
 
 /**
- * Creates an XMLHttpRequest and sends a POST request.
- * @param  {URL} cesUrl the URL to send the request to
- * @param  {string} token the token to use for authentication
- * @param  {string} requestBody the request body string
+ * Gets a promise for sending an http request
+ * @param {URL} requestUrl the URL to send hte request to
+ * @param {string} token the token to use during authentication
+ * @param {string} requestBody the request body
+ * @return {Promise} the Promise for the request
  */
-function sendPOSTRequest(cesUrl, token, requestBody) {
-  const options = {
-    hostname: cesUrl.hostname,
-    port: cesUrl.port,
-    path: cesUrl.pathname + cesUrl.search,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(requestBody),
-      'authorization': token,
-    },
-  };
-  const req = https.request(options, function(res) {
-    console.log(`statusCode: ${res.statusCode}`);
-    let data = '';
-    res.on('data', function(chunk) {
-      data += chunk;
+function getHttpPromise(requestUrl, token, requestBody) {
+  const requestCall = new Promise((resolve, reject) => {
+    const options = {
+      hostname: requestUrl.hostname,
+      port: requestUrl.port,
+      path: requestUrl.pathname + requestUrl.search,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestBody),
+        'authorization': token,
+      },
+    };
+    const req = http.request(options, function(response) {
+      let data = '';
+      response.on('data', function(chunk) {
+        data += chunk;
+      });
+      response.on('end', function() {
+        data = JSON.parse(data);
+        // promise resolved on success
+        resolve(data);
+      });
+      response.on('error', function(error) {
+        reject(error);
+      });
     });
-    res.on('end', function() {
-      data = JSON.parse(data);
-      console.log(data);
+    req.on('error', function(error) {
+      reject(error);
     });
-  });
-  console.log(req.getHeaders());
-  req.on('error', function(error) {
-    console.error(error);
+
+    req.write(requestBody);
+    req.end();
   });
 
-  req.write(requestBody);
-  req.end();
+  return requestCall;
 }
 
+/**
+ * Examines the given response body to determine whether an error occurred
+ * during the generate.
+ * @param {*} responseBody The body returned from the CES request
+ * @return {*} The response body object if the generate was successful,
+ * else throws an error
+ * @throws GenerateFailureException if there were failures during the generate
+ */
+function handleResponseBody(responseBody) {
+  if (responseBody === undefined) {
+    // empty response
+    throw new GenerateFailureException(
+        'No response was received from the generate request.');
+  } else if (responseBody.awaitStatus === undefined) {
+    // message may have been returned
+    if (responseBody.message) {
+      console.log(responseBody.message);
+    }
+    throw new GenerateFailureException(
+        'The generate did not complete successfully.');
+  } else if (responseBody.awaitStatus.generateFailedCount !== 0) {
+    console.error(getStatusMessageToPrint(responseBody.awaitStatus.statusMsg));
+    throw new GenerateFailureException(
+        'There were generate failures.');
+  } else {
+    // success
+    console.log(getStatusMessageToPrint(responseBody.awaitStatus.statusMsg));
+    return responseBody;
+  }
+}
+
+/**
+ * The status message in the awaitStatus may be a single string, or an array.
+ * This method determines what the status contains and returns a single string.
+ * @param {string | Array} statusMsg the statusMsg inside the awaitStatus in
+ * the responseBody
+ * @return {string} the statusMsg as a single string.
+ */
+function getStatusMessageToPrint(statusMsg) {
+  let message = '';
+  if (typeof statusMsg == 'string') {
+    message = statusMsg;
+  } else if (statusMsg instanceof Array) {
+    statusMsg.forEach((line) => message = message + `${line}\n`);
+  }
+  return message;
+}
+
+/**
+ * Error to throw when the response for the generate request is incomplete
+ *  or indicates errors.
+ * @param  {string} message the message associated with the error
+ */
+function GenerateFailureException(message) {
+  this.message = message;
+  this.name = 'GenerateFailureException';
+}
+GenerateFailureException.prototype = Object.create(Error.prototype);
+
 module.exports = {
+  retrieveInputs,
   parseStringAsJson,
   getParmsFromInputs,
   validateBuildParms,
   convertObjectToJson,
   assembleRequestUrl,
   assembleRequestBodyObject,
-  sendPOSTRequest,
-  stringHasContent
+  stringHasContent,
+  GenerateFailureException,
+  handleResponseBody,
+  getHttpPromise,
 };

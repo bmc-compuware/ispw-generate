@@ -1,5 +1,8 @@
 name: 'ispw-generate'
 description: 'Run a generate in ISPW'
+branding:
+  icon: activity
+  color: orange
 inputs:
   ces_url:
     description: 'The URL to send requests to.'
@@ -11,7 +14,7 @@ inputs:
     description: 'The ID for the instance of ISPW to connect to'
     required: true
   runtime_configuration:
-    description: 'the runtime configuration used when connecting to ISPW'
+    description: 'The runtime configuration used when connecting to ISPW'
     required: false
   assignment_id:
     description: 'The container for which you intend to generate tasks.'
