@@ -6063,7 +6063,7 @@ try {
   let buildParms;
   console.log('--------------------');
   if (core.getInput('generateAutomatically') === 'true') {
-    buildParms = utils.getParmsFromFile(parmFileLocation);
+    buildParms = utils.parseFileAsJson(parmFileLocation);
   } else {
     const inputAssignment = core.getInput('assignmentId');
     const inputLevel = core.getInput('level');

@@ -1,45 +1,55 @@
 name: 'ispw-generate'
 description: 'Run a generate in ISPW'
 inputs:
-  cesUrl:
+  ces_url:
     description: 'The URL to send requests to.'
     required: true
-  cesToken:
+  ces_token:
     description: 'The token to use when connecting to ISPW through CES'
     required: true
   srid:
     description: 'The ID for the instance of ISPW to connect to'
     required: true
-  runtimeConfiguration:
+  runtime_configuration:
     description: 'the runtime configuration used when connecting to ISPW'
     required: false
-  assignmentId: 
+  assignment_id:
     description: 'The container for which you intend to generate tasks.'
     required: false
-  level: 
+  level:
     description: 'The level that the tasks exist at in the assignment'
     required: false
-  taskId:
+  task_id:
     description: 'The comma-separated list of task IDs for the tasks that need to be generated'
     required: false
-  generateAutomatically:
+  generate_automatically:
     description: 'The request parameters for the generate will come from a file written to a local directory. This option is only valid when used in combination with a Git to ISPW Integration step'
     required: false
-  changeType: 
+  change_type: 
     description: 'S for standard, I for incidental, or E for emergency. Default value of S'
     required: true
     default: 'S'
-  executionStatus:
+  execution_status:
     description: 'I for immediate execution or at start date/time, H to create request in hold'
     required: true
     default: 'I'
-  autoDeploy:
+  auto_deploy:
     description: 'Generates can be set up to automatically Deploy as well by an option set up by the ISPW. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through ISPW, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
     required: true
     default: 'false'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  generate_failed_count:
+    description: 'The number of tasks that failed to generate'
+  generate_success_count:
+    description: 'The number of tasks that generated successfully'
+  has_failures:
+    description: 'Whether there were any generate failures'
+  task_count:
+    description: 'The total number of tasks a generate was initiated against'
+  set_id:
+    description: 'The ID of the set that was used for processing'
+  url:
+    description: 'The URL that can be used to retrieved information about the set that was used for processing'
 runs:
   using: 'node12'
   main: 'dist/index.js'

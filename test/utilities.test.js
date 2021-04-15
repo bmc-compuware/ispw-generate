@@ -13,48 +13,11 @@ const path = require('path');
 
 describe('Testing index.js', function () {
 
-  describe('#getParmsFileStringContents(parmFileLocation)', function () {
-    this.timeout(25000);
-    this.beforeAll(function () {
-      var dir = __dirname + '/workspace';
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-    })
-    it('should return empty string', function () {
-      let pathName = __dirname + '/workspace/testEmpty.txt';
-      pathName = path.normalize(pathName);
-      fs.writeFileSync(pathName, '');
-      var utils = require('../src/utilities.js');
-      let buildParms = utils.getFileContentsStr(pathName);
-      assert.strictEqual(buildParms, '');
-    });
-
-
-    it('should return abc', function () {
-      let pathName = __dirname + '/workspace/testABC.txt';
-      pathName = path.normalize(pathName);
-      fs.writeFileSync(pathName, 'abc');
-      var utils = require('../src/utilities.js');
-      let buildParms = utils.getFileContentsStr(pathName);
-      assert.strictEqual(buildParms, 'abc');
-    });
-  });
-
-  describe('#getParmsFromFile(parmFileLocation)', function () {
-    this.timeout(25000);
-    this.beforeAll(function () {
-      var dir = __dirname + '/workspace';
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-    })
+  describe('#parseStringAsJson(jsonString)', function () {
+    this.timeout(5000);
     it('should return empty buildparms', function () {
-      let pathName = __dirname + '/workspace/automaticBuildParams.txt';
-      pathName = path.normalize(pathName);
-      fs.writeFileSync(pathName, JSON.stringify({}));
-      var getParmsFromFile = require('../src/utilities.js').getParmsFromFile;
-      let output = getParmsFromFile(pathName);
+      var utils = require('../src/utilities.js');
+      let output = utils.parseStringAsJson(JSON.stringify({}));
       assert.strictEqual(output.containerId, undefined);
       assert.strictEqual(output.releaseId, undefined);
       assert.strictEqual(output.taksIds, undefined);
@@ -62,32 +25,25 @@ describe('Testing index.js', function () {
     });
 
     it('should return undefined', function () {
-      let pathName = __dirname + '/workspace/automaticBuildParams.txt';
-      pathName = path.normalize(pathName);
-      fs.writeFileSync(pathName, '');
       var utils = require('../src/utilities.js');
-      let buildParms = utils.getParmsFromFile(pathName);
-      assert.strictEqual(buildParms, undefined);
+      let output = utils.parseStringAsJson('');
+      assert.strictEqual(output, undefined);
     });
 
     it('should return buildParms object with fields filled in', function () {
-      let pathName = __dirname + '/workspace/automaticBuildParams.txt';
-      pathName = path.normalize(pathName);
-      fs.writeFileSync(pathName, JSON.stringify({
+      var utils = require('../src/utilities.js');
+      let output = utils.parseStringAsJson(JSON.stringify({
         containerId: 'PLAY003736',
         releaseId: ' ',
         taskLevel: 'DEV1',
         taskIds: ['7E45E3087494']
       }));
-      var utils = require('../src/utilities.js');
-      let output = utils.getParmsFromFile(pathName);
       assert.strictEqual(output.containerId, 'PLAY003736');
       assert.strictEqual(output.releaseId, ' ');
       assert.strictEqual(output.taskLevel, 'DEV1');
       assert.deepEqual(output.taskIds, ['7E45E3087494']);
     });
   });
-
 
   describe('#getParmsFromInputs(inputAssignment, inputLevel, inputTaskId)', function () {
     it('should return empty - null passed in', function () {

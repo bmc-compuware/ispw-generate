@@ -1,13 +1,14 @@
 {
   "name": "ispw-generate",
+  "icon": "media/ISPW_marble.png",
   "version": "1.0.0",
-  "description": "Repository for the ISPW generate action source",
+  "description": "GitHub action to execute an ISPW generate",
   "main": "./dist/index.js",
   "scripts": {
     "build": "ncc build index.js -o dist",
     "lint": "npx eslint ./**.js ./src/**.js --fix",
     "test": "nyc --all=true --exclude=\"dist/**\" --exclude=\"coverage/**\" --exclude=\"test/**\" --reporter=json --reporter=text mocha",
-    "coverage": "nyc check-coverage --lines 55 --branches 75 --statements 55 --functions 55",
+    "coverage": "nyc check-coverage --lines 50 --branches 75 --statements 50 --functions 50",
     "check": "npm run lint && npm run build && npm run test && npm run coverage"
   },
   "repository": {

@@ -6,35 +6,19 @@
 * (c) Copyright 2021 BMC Software, Inc.
 * This code is licensed under MIT license (see LICENSE.txt for details)
 */
-const fs = require('fs');
 const https = require('https');
-
-/**
- * Reads the file from the given path and returns the contents as a string
- * @param  {string} parmFileLocation absolute path to the file to read
- * @return {string | undefined} contents of file or undefined
- * if the file does not exist
- */
-function getFileContentsStr(parmFileLocation) {
-  let fileContents;
-  if (fs.existsSync(parmFileLocation)) {
-    fileContents = fs.readFileSync(parmFileLocation, 'utf8');
-  }
-  return fileContents;
-}
 
 /**
  * Reads the contents of the file at the given path and returns the contents as
  * an object
- * @param  {string} parmFileLocation absolute path to the file to read
+ * @param  {string} jsonString absolute path to the file to read
  * @return {any | undefined} parsed contents of the file,
  * or undefined if the file is empty
  */
-function parseFileAsJson(parmFileLocation) {
+function parseStringAsJson(jsonString) {
   let parsedObj;
-  const fileContents = getFileContentsStr(parmFileLocation);
-  if (stringHasContent(fileContents)) {
-    parsedObj = JSON.parse(fileContents);
+  if (stringHasContent(jsonString)) {
+    parsedObj = JSON.parse(jsonString);
   }
   return parsedObj;
 }
@@ -207,7 +191,7 @@ function sendPOSTRequest(cesUrl, token, requestBody) {
       'authorization': token,
     },
   };
-  const req = https.request(options, (res) => {
+  const req = https.request(options, function(res) {
     console.log(`statusCode: ${res.statusCode}`);
     let data = '';
     res.on('data', function(chunk) {
@@ -219,7 +203,7 @@ function sendPOSTRequest(cesUrl, token, requestBody) {
     });
   });
   console.log(req.getHeaders());
-  req.on('error', (error) => {
+  req.on('error', function(error) {
     console.error(error);
   });
 
@@ -228,13 +212,12 @@ function sendPOSTRequest(cesUrl, token, requestBody) {
 }
 
 module.exports = {
-  getParmsFromFile: parseFileAsJson,
+  parseStringAsJson,
   getParmsFromInputs,
-  getFileContentsStr,
   validateBuildParms,
   convertObjectToJson,
   assembleRequestUrl,
   assembleRequestBodyObject,
   sendPOSTRequest,
+  stringHasContent
 };
-
