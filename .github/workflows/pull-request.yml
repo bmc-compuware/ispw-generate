@@ -1,0 +1,30 @@
+name: pull-request-checks
+on: [pull_request]
+jobs:
+  build:
+    name: Building action and running tests
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+
+      - name: Install ncc
+        run: npm i -g @vercel/ncc
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Build
+        run: npm run build
+      
+      - name: Run Tests
+        run: npm run test
+
+      - name: Check Code Coverage
+        run: npm run coverage

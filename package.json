@@ -1,0 +1,39 @@
+{
+  "name": "ispw-generate",
+  "icon": "media/ISPW_marble.png",
+  "version": "1.0.0",
+  "description": "GitHub action to execute an ISPW generate",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "ncc build index.js -o dist",
+    "lint": "npx eslint ./**.js ./src/**.js --fix",
+    "test": "nyc --all=true --exclude=\"dist/**\" --exclude=\"coverage/**\" --exclude=\"test/**\" --reporter=json --reporter=text mocha",
+    "coverage": "nyc check-coverage --lines 50 --branches 75 --statements 50 --functions 50",
+    "check": "npm run lint && npm run build && npm run test && npm run coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Compuware-ISPW/ispw-generate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Compuware-ISPW/ispw-generate/issues"
+  },
+  "homepage": "https://github.com/Compuware-ISPW/ispw-generate#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "https": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.23.0",
+    "eslint-config-google": "^0.14.0",
+    "esm": "^3.2.25",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0"
+  }
+}
