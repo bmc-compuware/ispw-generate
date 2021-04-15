@@ -219,5 +219,5 @@ module.exports = {
   assembleRequestUrl,
   assembleRequestBodyObject,
   sendPOSTRequest,
-  stringHasContent
+  stringHasContent,
 };

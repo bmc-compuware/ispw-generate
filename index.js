@@ -13,8 +13,9 @@ const utils = require('../src/utilities.js');
 try {
   let buildParms;
   console.log('--------------------');
-  let genParmsInputStr = core.getInput('generate_automatically');
+  const genParmsInputStr = core.getInput('generate_automatically');
   if (utils.stringHasContent(genParmsInputStr)) {
+    console.log('using automatic build parms'); // TODO: remove
     buildParms = utils.parseStringAsJson(genParmsInputStr);
   } else {
     const inputAssignment = core.getInput('assignment_id');
@@ -23,32 +24,41 @@ try {
     buildParms = utils.getParmsFromInputs(inputAssignment,
         inputLevel,
         inputTaskId);
+    console.log('using build parms from inputs'); // TODO: remove
   }
 
+  console.log('build parms: ' + buildParms); // TODO: remove
   if (!utils.validateBuildParms(buildParms)) {
     throw new InvalidArgumentException(
         'Inputs required for ispw-generate are missing. '+
     '\nSkipping the generate request....');
   }
 
-  console.log('...generating tasks in assignment ' +
+  console.log('Generating tasks in assignment ' +
     buildParms.containerId + ' at level ' +
     buildParms.taskLevel);
 
   const cesUrl = core.getInput('ces_url');
   const srid = core.getInput('srid');
+  console.log('using ces_url: ' + cesUrl); // TODO: remove
+  console.log('using srid' + srid); // TODO: remove
   const requestUrl = utils.assembleRequestUrl(cesUrl, srid, buildParms);
 
   const runtimeConfig = core.getInput('runtime_configuration');
   const changeType = core.getInput('change_type');
   const executionStatus = core.getInput('execution_status');
   const autoDeploy = core.getInput('auto_deploy');
+  console.log('using runtimeConfig: ' + runtimeConfig); // TODO: remove
+  console.log('using changeType' + changeType); // TODO: remove
+  console.log('using executionStatus: ' + executionStatus); // TODO: remove
+  console.log('using autoDeploy' + autoDeploy); // TODO: remove
   const requestBodyObj = utils.assembleRequestBodyObject(runtimeConfig,
       changeType,
       executionStatus,
       autoDeploy);
 
   const requestBodyStr = utils.convertObjectToJson(requestBodyObj);
+  console.log('using requestBodyStr' + requestBodyStr); // TODO: remove
   const cesToken = core.getInput('ces_token');
   util.sendPOSTRequest(requestUrl, cesToken, requestBodyStr);
 
@@ -61,10 +71,10 @@ try {
   const payload = JSON.stringify(github.context.payload, undefined, 2);
   console.log(`The event payload: ${payload}`);
 } catch (error) {
-  if (e instanceof MissingArgumentException) {
+  if (error instanceof MissingArgumentException) {
     // this could occur if there was nothing to load during the sync process
     // no need to fail the action if the generate is never attempted
-    console.log(e.message);
+    console.log(error.message);
   } else {
     core.setFailed(error.message);
   }
