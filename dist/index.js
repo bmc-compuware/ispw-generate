@@ -6062,12 +6062,13 @@ const utils = __nccwpck_require__(1);
 try {
   let buildParms;
   console.log('--------------------');
-  if (core.getInput('generateAutomatically') === 'true') {
-    buildParms = utils.parseFileAsJson(parmFileLocation);
+  let genParmsInputStr = core.getInput('generate_automatically');
+  if (utils.stringHasContent(genParmsInputStr)) {
+    buildParms = utils.parseStringAsJson(genParmsInputStr);
   } else {
-    const inputAssignment = core.getInput('assignmentId');
+    const inputAssignment = core.getInput('assignment_id');
     const inputLevel = core.getInput('level');
-    const inputTaskId = core.getInput('taskId');
+    const inputTaskId = core.getInput('task_id');
     buildParms = utils.getParmsFromInputs(inputAssignment,
         inputLevel,
         inputTaskId);
@@ -6083,21 +6084,21 @@ try {
     buildParms.containerId + ' at level ' +
     buildParms.taskLevel);
 
-  const cesUrl = core.getInput('cesUrl');
+  const cesUrl = core.getInput('ces_url');
   const srid = core.getInput('srid');
   const requestUrl = utils.assembleRequestUrl(cesUrl, srid, buildParms);
 
-  const runtimeConfig = core.getInput('runtimeConfiguration');
-  const changeType = core.getInput('changeType');
-  const executionStatus = core.getInput('executionStatus');
-  const autoDeploy = core.getInput('autoDeploy');
+  const runtimeConfig = core.getInput('runtime_configuration');
+  const changeType = core.getInput('change_type');
+  const executionStatus = core.getInput('execution_status');
+  const autoDeploy = core.getInput('auto_deploy');
   const requestBodyObj = utils.assembleRequestBodyObject(runtimeConfig,
       changeType,
       executionStatus,
       autoDeploy);
 
   const requestBodyStr = utils.convertObjectToJson(requestBodyObj);
-  const cesToken = core.getInput('cesToken');
+  const cesToken = core.getInput('ces_token');
   util.sendPOSTRequest(requestUrl, cesToken, requestBodyStr);
 
   console.log('...set ' + taskResponse.getSetId() + ' created to generate');
