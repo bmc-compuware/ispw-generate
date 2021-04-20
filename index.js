@@ -7,79 +7,96 @@
 * This code is licensed under MIT license (see LICENSE.txt for details)
 */
 const core = require('@actions/core');
-const github = require('@actions/github');
 const utils = require('../src/utilities.js');
 
 try {
   let buildParms;
-  console.log('--------------------');
-  const genParmsInputStr = core.getInput('generate_automatically');
-  if (utils.stringHasContent(genParmsInputStr)) {
-    console.log('using automatic build parms'); // TODO: remove
-    buildParms = utils.parseStringAsJson(genParmsInputStr);
+  const inputs = utils.retrieveInputs(core);
+
+  if (utils.stringHasContent(inputs.generateAutomatically)) {
+    console.log('Generate parameters are being read from the ' +
+      'generate_automatically input.');
+    buildParms = utils.parseStringAsJson(inputs.generateAutomatically);
   } else {
-    const inputAssignment = core.getInput('assignment_id');
-    const inputLevel = core.getInput('level');
-    const inputTaskId = core.getInput('task_id');
-    buildParms = utils.getParmsFromInputs(inputAssignment,
-        inputLevel,
-        inputTaskId);
-    console.log('using build parms from inputs'); // TODO: remove
+    console.log('Generate parameters are being retrieved from the inputs.');
+    buildParms = utils.getParmsFromInputs(inputs.assignmentId,
+        inputs.level,
+        inputs.taskId);
   }
 
-  console.log('build parms: ' + buildParms); // TODO: remove
   if (!utils.validateBuildParms(buildParms)) {
-    throw new InvalidArgumentException(
-        'Inputs required for ispw-generate are missing. '+
-    '\nSkipping the generate request....');
+    throw new MissingArgumentException(
+        'Inputs required for ispw-generate are missing. ' +
+      '\nSkipping the generate request....');
   }
 
-  console.log('Generating tasks in assignment ' +
-    buildParms.containerId + ' at level ' +
-    buildParms.taskLevel);
+  const requestUrl = utils.assembleRequestUrl(inputs.cesUrl,
+      inputs.srid,
+      buildParms);
 
-  const cesUrl = core.getInput('ces_url');
-  const srid = core.getInput('srid');
-  console.log('using ces_url: ' + cesUrl); // TODO: remove
-  console.log('using srid' + srid); // TODO: remove
-  const requestUrl = utils.assembleRequestUrl(cesUrl, srid, buildParms);
+  const reqBodyObj = utils.assembleRequestBodyObject(inputs.runtimeConfig,
+      inputs.changeType,
+      inputs.execStat,
+      inputs.autoDeploy);
 
-  const runtimeConfig = core.getInput('runtime_configuration');
-  const changeType = core.getInput('change_type');
-  const executionStatus = core.getInput('execution_status');
-  const autoDeploy = core.getInput('auto_deploy');
-  console.log('using runtimeConfig: ' + runtimeConfig); // TODO: remove
-  console.log('using changeType' + changeType); // TODO: remove
-  console.log('using executionStatus: ' + executionStatus); // TODO: remove
-  console.log('using autoDeploy' + autoDeploy); // TODO: remove
-  const requestBodyObj = utils.assembleRequestBodyObject(runtimeConfig,
-      changeType,
-      executionStatus,
-      autoDeploy);
+  const reqBodyStr = utils.convertObjectToJson(reqBodyObj);
 
-  const requestBodyStr = utils.convertObjectToJson(requestBodyObj);
-  console.log('using requestBodyStr' + requestBodyStr); // TODO: remove
-  const cesToken = core.getInput('ces_token');
-  util.sendPOSTRequest(requestUrl, cesToken, requestBodyStr);
+  utils.getHttpPromise(requestUrl, inputs.cesToken, reqBodyStr)
+      .then((responseBody) => {
+        setOutputs(responseBody);
+        return utils.handleResponseBody(responseBody);
+      },
+      (error) => logErrorAndFailJob(error,
+          'An error occurred while sending the generate request'))
+      .then(() => console.log('The generate request completed successfully.'),
+          (error) => logErrorAndFailJob(error,
+              'An error occurred during generate.'));
 
-  console.log('...set ' + taskResponse.getSetId() + ' created to generate');
-
-
-  const time = (new Date()).toTimeString();
-  core.setOutput('time', time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  console.log(`The event payload: ${payload}`);
+  // the following code will execute after the HTTP request was made,
+  // but before it receives a response.
+  console.log('Starting the generate process for task ' +
+    utils.convertObjectToJson(buildParms.taskId));
 } catch (error) {
   if (error instanceof MissingArgumentException) {
-    // this could occur if there was nothing to load during the sync process
+    // this would occur if there was nothing to load during the sync process
     // no need to fail the action if the generate is never attempted
     console.log(error.message);
   } else {
-    core.setFailed(error.message);
+    logErrorAndFailJob(error, 'An error occurred while starting the generate');
   }
 }
-console.log('--------------------');
+
+/**
+ * Logs the failure message to the error console and fails the job
+ * @param {Error} error The error to show when failing the job
+ * @param {string} failureMessage The message to print to the error console
+ * before the job is failed
+ */
+function logErrorAndFailJob(error, failureMessage) {
+  console.error(failureMessage);
+  core.setFailed(error);
+}
+
+/**
+ * Takes the fields from the response body and sends them to the outputs of
+ * the job
+ * @param {*} responseBody
+ */
+function setOutputs(responseBody) {
+  if (responseBody) {
+    core.setOutput('set_id', responseBody.setId);
+    core.setOutput('url', responseBody.url);
+
+    if (responseBody.awaitStatus) {
+      core.setOutput('generate_failed_count',
+          responseBody.awaitStatus.generateFailedCount);
+      core.setOutput('generate_success_count',
+          responseBody.awaitStatus.generateSuccessCount);
+      core.setOutput('has_failures', responseBody.awaitStatus.hasFailures);
+      core.setOutput('task_count', responseBody.awaitStatus.taskCount);
+    }
+  }
+}
 
 /**
  * Error to throw when not all the arguments have been specified for the action.
@@ -89,3 +106,4 @@ function MissingArgumentException(message) {
   this.message = message;
   this.name = 'MissingArgumentException';
 }
+MissingArgumentException.prototype = Object.create(Error.prototype);
