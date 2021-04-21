@@ -37,7 +37,7 @@ jobs:
           ces_token: ${{ secrets.CES_TOKEN }}
           srid: 'host-37733'
           runtime_configuration: 'ISPW'
-          generate_automatically: ${{ steps.sync.outputs.changedProgramsJson }}
+          generate_automatically: ${{ steps.sync.outputs.automaticBuildJson }}
       - name: Get the number of generate failures
         run: echo "The number of generate failures is ${{ steps.generate.outputs.generate_failed_count }}"
 ```
