@@ -47,12 +47,14 @@ outputs:
     description: 'The number of tasks that generated successfully'
   has_failures:
     description: 'Whether there were any generate failures'
+  is_timed_out:
+    description: 'Whether the generate timed out'
   task_count:
     description: 'The total number of tasks a generate was initiated against'
   set_id:
     description: 'The ID of the set that was used for processing'
   url:
-    description: 'The URL that can be used to retrieved information about the set that was used for processing'
+    description: 'The URL that can be used to retrieve information about the set that was used for processing'
 runs:
   using: 'node12'
   main: 'dist/index.js'
