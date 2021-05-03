@@ -65,8 +65,10 @@ try {
         throw error;
       })
       .then(() => console.log('The generate request completed successfully.'),
-          (error) => logErrorAndFailJob(error,
-              'The generate request did not complete successfully.'));
+          (error) => {
+            core.debug(error.stack);
+            core.setFailed(error.message);
+          });
 
   // the following code will execute after the HTTP request was started,
   // but before it receives a response.
@@ -77,7 +79,9 @@ try {
     // no need to fail the action if the generate is never attempted
     console.log(error.message);
   } else {
-    logErrorAndFailJob(error, 'An error occurred while starting the generate');
+    core.debug(error.stack);
+    console.error('An error occurred while starting the generate');
+    core.setFailed(error.message);
   }
 }
 
@@ -109,17 +113,6 @@ function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
     buildParms.taskIds = inputTaskId.split(',');
   }
   return buildParms;
-}
-
-/**
- * Logs the failure message to the error console and fails the job
- * @param {Error} error The error to show when failing the job
- * @param {string} failureMessage The message to print to the error console
- * before the job is failed
- */
-function logErrorAndFailJob(error, failureMessage) {
-  console.error(failureMessage);
-  core.setFailed(error);
 }
 
 /**
@@ -244,7 +237,6 @@ GenerateFailureException.prototype = Object.create(Error.prototype);
 
 module.exports = {
   getParmsFromInputs,
-  logErrorAndFailJob,
   setOutputs,
   getGenerateAwaitUrlPath,
   assembleRequestBodyObject,
