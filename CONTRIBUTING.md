@@ -30,9 +30,9 @@ This repository uses ESLint to enforce standard JavaScript style guidelines. Kee
 
 In order to manually test changes, follow these steps
 
-1. If you do not already have one, set up a new **private** repository in the Compuware-ISPW GitHub organization
-2. In the ispw-generate repository you have checked out locally, run `npm run build`. This will generate a new `index.js` file in the `dist` directory
-3. Commit all of your action changes (including the generated index.js file) to a branch in the ispw-generate repository
+1. If you do not already have one, set up a new **private** repository in the Compuware-ISPW GitHub organization. This repository should hold mainframe source and will be used to test the action.
+2. In the ispw-generate repository you have checked out locally, make your necessary code changes, then run `npm run build`. This will generate a new `index.js` file in the `dist` directory
+3. Commit all of your action changes (including the generated dist/index.js file) to a branch in the ispw-generate repository
 4. In your private repository, create a workflow script in the `.github/workflows` folder. You can choose to pass in hardcoded values, or create a separate step to handle the sync and use the output from that step (see the examples in the README). When referencing the ispw-generate action, you should use `Compuware-ISPW/ispw-generate@[your-branch-name]`
 5. Run your workflow from your private repository. If further code changes are required, repeat from Step 2.
 

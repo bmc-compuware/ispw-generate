@@ -87,12 +87,13 @@ jobs:
 
 | Output name | Output type | Description |
 | ----------- | ----------- | ----------- |
-| `generate_failed_count` | number | The number of tasks that failed to generate |
-| `generate_success_count` | number | The number of tasks that generated successfully |
-| `has_failures` | boolean | Whether there were any generate failures |
-| `task_count` | number | The total number of tasks a generate was initiated against |
-| `set_id` | string | The ID of the set that was used for processing |
-| `url` | string | The URL that can be used to retrieved information about the set that was used for processing |
+| `generate_failed_count` | number | The number of tasks that failed to generate. |
+| `generate_success_count` | number | The number of tasks that generated successfully. |
+| `is_timed_out` | boolean | Whether the generate timed out. A time out would indicate that the generate has not completed and may still be running. |
+| `has_failures` | boolean | Whether there were any generate failures. |
+| `task_count` | number | The total number of tasks a generate was initiated against. |
+| `set_id` | string | The ID of the set that was used for processing. |
+| `url` | string | The URL that can be used to retrieved information about the set that was used for processing. |
 
 ## Setup
 
