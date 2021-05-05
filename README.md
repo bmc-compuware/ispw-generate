@@ -129,6 +129,10 @@ On the New Secret page, paste the token that was copied earlier and click the Ad
 
 Use the examples above to fill in a workflow script using the ispw-generate action. Note that if you want the input assignment, level, and taskIds to be automatically picked up from the ISPW synchronization with Git, you will need a synchronization step in you job, which will run before the generate.
 
+### Troubleshooting
+
+To enable debug logging in your GitHub actions workflow, see the guide [here](https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging).
+
 ### Developers
 
 For information about contributing to the ispw-generate action, see [Developing on the ispw-generate GitHub action](./CONTRIBUTING.md)

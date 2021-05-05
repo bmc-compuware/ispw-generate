@@ -54,7 +54,7 @@ try {
           core.debug('ISPW: received error response body: ' +
             utils.convertObjectToJson(error.response.data));
           setOutputs(core, error.response.data);
-          return Promise.reject(error.response.data.message);
+          throw new GenerateFailureException(error.response.data.message);
         }
         throw error;
       })
@@ -84,7 +84,7 @@ try {
 /** *****************************************************************************************/
 
 /**
- * Uses the input parameters from the action metadata to fille in a BuildParms
+ * Uses the input parameters from the action metadata to fill in a BuildParms
  * object.
  * @param  {string} inputAssignment the assignmentId passed into the action
  * @param  {string} inputLevel the ISPW level passed into the action
