@@ -90,7 +90,7 @@ try {
 /** *****************************************************************************************/
 
 /**
- * Uses the input parameters from the action metadata to fille in a BuildParms
+ * Uses the input parameters from the action metadata to fill in a BuildParms
  * object.
  * @param  {string} inputAssignment the assignmentId passed into the action
  * @param  {string} inputLevel the ISPW level passed into the action
@@ -784,50 +784,6 @@ function stringHasContent(inputStr) {
   }
   return hasContent;
 }
-
-
-module.exports = {
-  retrieveInputs,
-  parseStringAsJson,
-  validateBuildParms,
-  convertObjectToJson,
-  assembleRequestUrl,
-  stringHasContent,
-  getStatusMessageToPrint,
-  getHttpPostPromise,
-};
-
-
-/***/ }),
-
-/***/ 7811:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-module.exports = __nccwpck_require__(1575);
-
-/***/ }),
-
-/***/ 4366:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-var utils = __nccwpck_require__(3024);
-var settle = __nccwpck_require__(7104);
-var buildFullPath = __nccwpck_require__(4622);
-var buildURL = __nccwpck_require__(4779);
-var http = __nccwpck_require__(8605);
-var https = __nccwpck_require__(7211);
-var httpFollow = __nccwpck_require__(6573).http;
-var httpsFollow = __nccwpck_require__(6573).https;
-var url = __nccwpck_require__(8835);
-var zlib = __nccwpck_require__(8761);
-var pkg = __nccwpck_require__(696);
-var createError = __nccwpck_require__(9614);
-var enhanceError = __nccwpck_require__(5453);
-
-var isHttps = /https:?/;
 
 /**
  * Gets a promise for sending an http POST request
