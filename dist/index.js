@@ -60,7 +60,6 @@ try {
           core.debug('ISPW: received error response body: ' +
             utils.convertObjectToJson(error.response.data));
           setOutputs(core, error.response.data);
-          console.log(error.response.data.message);
           throw new GenerateFailureException(error.response.data.message);
         }
         throw error;
