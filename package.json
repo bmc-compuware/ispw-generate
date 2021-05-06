@@ -15,13 +15,13 @@
     "type": "git",
     "url": "git+https://github.com/Compuware-ISPW/ispw-generate.git"
   },
-  "keywords": [],
+  "keywords": ["ISPW", "Compuware", "BMC", "generate", "ispw-generate"],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Compuware-ISPW/ispw-generate/issues"
+    "url": "https://github.com/bmc-compuware/ispw-generate/issues"
   },
-  "homepage": "https://github.com/Compuware-ISPW/ispw-generate#readme",
+  "homepage": "https://github.com/bmc-compuware/ispw-generate#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/github": "^4.0.0",
