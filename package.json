@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Compuware-ISPW/ispw-generate.git"
+    "url": "git+https://github.com/bmc-compuware/ispw-generate.git"
   },
   "keywords": ["ISPW", "Compuware", "BMC", "generate", "ispw-generate"],
   "author": "",
