@@ -15,7 +15,7 @@ jobs:
     name: A job to sync git source into ISPW, then generate it on the mainframe
     steps:
       - name: Sync step
-        uses: compuware-ispw/ispw-sync@v20.6.1.gtk
+        uses: bmc-compuware/ispw-sync@v20.6.1.gtk
         id: sync
         with:
           host: 'host.example.com'
@@ -30,7 +30,7 @@ jobs:
           gitPass: ${{ secrets.GITPASS }}
           showEnv: true
       - name: Generate
-        uses: compuware-ispw/ispw-generate@v1
+        uses: bmc-compuware/ispw-generate@v1
         id: generate
         with:
           ces_url: 'https://CES:48226/'
@@ -53,7 +53,7 @@ jobs:
     name: A job to generate source in ISPW
     steps:
       - name: Generate
-        uses: compuware-ispw/ispw-generate@v1
+        uses: bmc-compuware/ispw-generate@v1
         id: generate
         with:
           ces_url: "https://CES:48226/"
