@@ -1,5 +1,5 @@
 name: 'ispw-generate'
-description: 'Run a generate in BMC Compuware ISPW'
+description: 'Run a generate in ISPW'
 branding:
   icon: play
   color: orange
