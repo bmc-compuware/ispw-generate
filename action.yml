@@ -30,7 +30,7 @@ inputs:
     required: false
   change_type: 
     description: 'S for standard, I for incidental, or E for emergency. Default value of S'
-    required: true
+    required: false
     default: 'S'
   execution_status:
     description: 'I for immediate execution or at start date/time, H to create request in hold'
@@ -38,7 +38,7 @@ inputs:
     default: 'I'
   auto_deploy:
     description: 'Generates can be set up to automatically Deploy as well by an option set up by the ISPW. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through ISPW, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
-    required: false
+    required: true
     default: 'false'
 outputs:
   generate_failed_count:
