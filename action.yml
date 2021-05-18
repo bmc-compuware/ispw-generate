@@ -55,6 +55,8 @@ outputs:
     description: 'The ID of the set that was used for processing'
   url:
     description: 'The URL that can be used to retrieve information about the set that was used for processing'
+  output_json:
+    description: 'the JSON output from build'
 runs:
   using: 'node12'
   main: 'dist/index.js'
