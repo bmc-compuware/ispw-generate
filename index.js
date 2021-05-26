@@ -117,6 +117,7 @@ function getParmsFromInputs(inputAssignment, inputLevel, inputTaskId) {
  */
 function setOutputs(core, responseBody) {
   if (responseBody) {
+    core.setOutput('output_json', utils.convertObjectToJson(responseBody));
     core.setOutput('set_id', responseBody.setId);
     core.setOutput('url', responseBody.url);
 

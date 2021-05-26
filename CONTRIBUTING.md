@@ -7,7 +7,7 @@ Before you begin changing code, you should do the following:
 1. **Install NodeJS.** You can find the installer [here](https://nodejs.org/en/download/current/).
 2. **Install VS Code** or another Javascript editor. VS Code is not specifically required, but it is recommended. You can find the installer [here](https://code.visualstudio.com/download).
 3. **Install ncc.** ncc is used to package the action so that all of the dependencies are installed along with it. Install ncc by entering the following in your terminal: `npm i -g @vercel/ncc`
-4. **Clone the git repository to your local machine.** Clone the repository from GitHub using the command `git clone https://github.com/Compuware-ISPW/ispw-generate.git`
+4. **Clone the git repository to your local machine.** Clone the repository from GitHub using the command `git clone https://github.com/bmc-compuware/ispw-generate.git`
 5. **Install all the dependencies.** From inside the ispw-generate folder of the repository execute the following in the terminal: `npm install` . This will install all of the required software modules.
 
 ## Changing code
@@ -30,10 +30,10 @@ This repository uses ESLint to enforce standard JavaScript style guidelines. Kee
 
 In order to manually test changes, follow these steps
 
-1. If you do not already have one, set up a new **private** repository in the Compuware-ISPW GitHub organization. This repository should hold mainframe source and will be used to test the action.
+1. If you do not already have one, set up a new **private** repository in the bmc-compuware GitHub organization. This repository should hold mainframe source and will be used to test the action.
 2. In the ispw-generate repository you have checked out locally, make your necessary code changes, then run `npm run build`. This will generate a new `index.js` file in the `dist` directory
 3. Commit all of your action changes (including the generated dist/index.js file) to a branch in the ispw-generate repository
-4. In your private repository, create a workflow script in the `.github/workflows` folder. You can choose to pass in hardcoded values, or create a separate step to handle the sync and use the output from that step (see the examples in the README). When referencing the ispw-generate action, you should use `Compuware-ISPW/ispw-generate@[your-branch-name]`
+4. In your private repository, create a workflow script in the `.github/workflows` folder. You can choose to pass in hardcoded values, or create a separate step to handle the sync and use the output from that step (see the examples in the README). When referencing the ispw-generate action, you should use `bmc-compuware/ispw-generate@[your-branch-name]`
 5. Run your workflow from your private repository. If further code changes are required, repeat from Step 2.
 
 ### Preparing for code review

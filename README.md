@@ -94,6 +94,7 @@ jobs:
 | `task_count` | number | The total number of tasks a generate was initiated against. |
 | `set_id` | string | The ID of the set that was used for processing. |
 | `url` | string | The URL that can be used to retrieved information about the set that was used for processing. |
+| `output_json` | JSON | the JSON output from build |
 
 ## Setup
 
