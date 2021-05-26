@@ -1,4 +1,6 @@
 name: Build latest and upload
+# runs a build against the latest commit, and commits the dist folder contents if they do not match
+# this prevents the dist/index file from getting out of sync from the ./index file
 on:
   push:
     branches:

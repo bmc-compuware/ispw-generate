@@ -26,7 +26,7 @@ inputs:
     description: 'The comma-separated list of task IDs for the tasks that need to be generated'
     required: false
   generate_automatically:
-    description: 'The request parameters for the generate will come from a file written to a local directory. This option is only valid when used in combination with a Git to ISPW Integration step'
+    description: 'The request parameters for the generate will come from JSON passed in this input. This option is only valid when used in combination with a Git to ISPW Integration step'
     required: false
   change_type: 
     description: 'S for standard, I for incidental, or E for emergency. Default value of S'
