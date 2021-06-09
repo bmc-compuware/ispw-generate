@@ -27,7 +27,7 @@ jobs:
           application: 'PLAY'
           checkoutLevel: 'DEV2'
           gitUid: 'admin'
-          gitPass: ${{ secrets.GITPASS }}
+          gitToken: ${{ secrets.GITHUB_TOKEN }}
           showEnv: true
       - name: Generate
         uses: bmc-compuware/ispw-generate@v1
