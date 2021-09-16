@@ -1,5 +1,5 @@
 name: 'ispw-generate'
-description: 'Run a generate in ISPW'
+description: 'Run a mainframe generate using ISPW'
 branding:
   icon: play
   color: orange
