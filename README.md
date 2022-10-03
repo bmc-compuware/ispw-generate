@@ -2,6 +2,20 @@
 
 The ispw-generate action allows your GitHub Actions workflow to trigger a generate in your instance of BMC Compuware ISPW on the mainframe. This action can be used in scenarios where your mainframe source is stored in git, or when you want your GitHub Actions workflow to operate on source that is already stored in ISPW.
 
+## Templates
+Create a GitHub workflow file, for example, [(ispw-sync-build-deploy.yml)](.github/templates/ispw-sync-build-deploy.yml) the workflow is broken up into the following stages:
+- Checkout - checks out the source code.
+- Synchronize changeset to ISPW - uses GitHub action ispw-sync to perform GitHub to ISPW synchronization.
+- Build ISPW tasks - uses GitHub action ispw-build to perform a build
+- Deploy ISPW tasks - uses gitHub action ispw-deploy to perform a deploy
+
+Or if you prefer to use GitHub action ispw-sync-local, you may specify the sync step. 
+For example, [(ispw-sync-local-generate-deploy.yml)](.github/templates/ispw-sync-local-generate-deploy.yml) the workflow is broken up into the following stages :
+- Checkout - checks out the source code.
+- Synchronize changeset to ISPW - uses GitHub action ispw-sync-local to perform GitHub to ISPW synchronization.
+- Generate ISPW tasks - uses GitHub action ispw-generate to perform a generate
+- Deploy ISPW tasks - uses gitHub action ispw-deploy to perform a deploy
+
 ## Example usage
 
 The following example will automatically retrieve the generate parameters from a previous step in the job
