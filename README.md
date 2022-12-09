@@ -151,3 +151,6 @@ To enable debug logging in your GitHub actions workflow, see the guide [here](ht
 ### Developers
 
 For information about contributing to the ispw-generate action, see [Developing on the ispw-generate GitHub action](./CONTRIBUTING.md)
+
+## See also
+- [License](LICENSE.txt)
