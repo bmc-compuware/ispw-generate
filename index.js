@@ -14,7 +14,7 @@ try {
   let inputs = ['generate_automatically', 'assignment_id', 'level', 'task_id', 'ces_url',
     'ces_token', 'srid', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
   inputs = utils.retrieveInputs(core, inputs);
-  core.debug('ISPW: parsed inputs: ' + utils.convertObjectToJson(inputs));
+  core.debug('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
 
   if (utils.stringHasContent(inputs.generate_automatically)) {
     console.log('Generate parameters are being retrieved from the ' +
@@ -24,25 +24,26 @@ try {
     console.log('Generate parameters are being retrieved from the inputs.');
     buildParms = getParmsFromInputs(inputs.assignment_id, inputs.level, inputs.task_id);
   }
-  core.debug('ISPW: parsed buildParms: ' + utils.convertObjectToJson(buildParms));
+  core.debug('Code Pipeline: parsed buildParms: ' + utils.convertObjectToJson(buildParms));
 
   const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
-        'Inputs required for ispw-generate are missing. ' +
+        'Inputs required for code-pipeline-generate are missing. ' +
       '\nSkipping the generate request....');
   }
 
   const reqPath = getGenerateAwaitUrlPath(inputs.srid, buildParms);
   const reqUrl = utils.assembleRequestUrl(inputs.ces_url, reqPath);
-  core.debug('ISPW: request url: ' + reqUrl.href);
+  core.debug('Code Pipeline: request url: ' + reqUrl.href);
 
   const reqBodyObj = assembleRequestBodyObject(inputs.runtime_configuration,
       inputs.change_type, inputs.execution_status, inputs.auto_deploy);
 
   utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
       .then((response) => {
-        core.debug('ISPW: received response body: ' + utils.convertObjectToJson(response.data));
+        core.debug('Code Pipeline: received response body: ' +
+         utils.convertObjectToJson(response.data));
         // generate could have passed or failed
         setOutputs(core, response.data);
         return handleResponseBody(response.data);
@@ -50,8 +51,8 @@ try {
       (error) => {
         // there was a problem with the request to CES
         if (error.response !== undefined) {
-          core.debug('ISPW: received error code: ' + error.response.status);
-          core.debug('ISPW: received error response body: ' +
+          core.debug('Code Pipeline: received error code: ' + error.response.status);
+          core.debug('Code Pipeline: received error response body: ' +
             utils.convertObjectToJson(error.response.data));
           setOutputs(core, error.response.data);
           throw new GenerateFailureException(error.response.data.message);
@@ -87,7 +88,7 @@ try {
  * Uses the input parameters from the action metadata to fill in a BuildParms
  * object.
  * @param  {string} inputAssignment the assignmentId passed into the action
- * @param  {string} inputLevel the ISPW level passed into the action
+ * @param  {string} inputLevel the Code Pipeline level passed into the action
  * @param  {string} inputTaskId the comma separated list of task IDs passed
  * into the action
  * @return {BuildParms} a BuildParms object with the fields filled in.
@@ -137,7 +138,7 @@ function setOutputs(core, responseBody) {
 /**
  * Gets the request path for the CES REST api generate-await on tasks. The returned path starts with
  * '/ispw/' and ends with the query parameters
- * @param {string} srid The SRID for this instance of ISPW
+ * @param {string} srid The SRID for this instance of Code Pipeline
  * @param {*} buildParms The build parms to use when filling out the request url
  * @return {string} the request path which can be appended to the CES url
  */
