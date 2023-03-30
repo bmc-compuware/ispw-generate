@@ -1,6 +1,6 @@
 # code-pipeline-generate
 
-The code-pipeline-generate action allows your GitHub Actions workflow to trigger a generate in your instance of BMC AMI DevX Workbench Code Pipeline on the mainframe. This action can be used in scenarios where your mainframe source is stored in git, or when you want your GitHub Actions workflow to operate on source that is already stored in Code Pipeline.
+The code-pipeline-generate action allows your GitHub Actions workflow to trigger a generate in your instance of BMC AMI DevX Code Pipeline on the mainframe. This action can be used in scenarios where your mainframe source is stored in git, or when you want your GitHub Actions workflow to operate on source that is already stored in Code Pipeline.
 
 ## Templates
 Create a GitHub workflow file, for example, [ispw-sync-build-deploy.yml](.github/templates/ispw-sync-build-deploy.yml) the workflow is broken up into the following stages:
