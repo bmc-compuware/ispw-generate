@@ -1,5 +1,5 @@
-name: 'ispw-generate'
-description: 'Run a mainframe generate using ISPW'
+name: 'code-pipeline-generate'
+description: 'Run a mainframe generate using Code Pipeline'
 branding:
   icon: play
   color: orange
@@ -8,13 +8,13 @@ inputs:
     description: 'The URL to send requests to.'
     required: true
   ces_token:
-    description: 'The token to use when connecting to ISPW through CES'
+    description: 'The token to use when connecting to Code Pipeline through CES'
     required: true
   srid:
-    description: 'The ID for the instance of ISPW to connect to'
+    description: 'The ID for the instance of Code Pipeline to connect to'
     required: true
   runtime_configuration:
-    description: 'The runtime configuration used when connecting to ISPW'
+    description: 'The runtime configuration used when connecting to Code Pipeline'
     required: false
   assignment_id:
     description: 'The container for which you intend to generate tasks.'
@@ -26,7 +26,7 @@ inputs:
     description: 'The comma-separated list of task IDs for the tasks that need to be generated'
     required: false
   generate_automatically:
-    description: 'The request parameters for the generate will come from JSON passed in this input. This option is only valid when used in combination with a Git to ISPW Integration step'
+    description: 'The request parameters for the generate will come from JSON passed in this input. This option is only valid when used in combination with a Git to Code Pipeline Integration step'
     required: false
   change_type: 
     description: 'S for standard, I for incidental, or E for emergency. Default value of S'
@@ -37,7 +37,7 @@ inputs:
     required: false
     default: 'I'
   auto_deploy:
-    description: 'Generates can be set up to automatically Deploy as well by an option set up by the ISPW. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through ISPW, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
+    description: 'Generates can be set up to automatically Deploy as well by an option set up by the Code Pipeline. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through Code Pipeline, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
     required: true
     default: 'false'
 outputs:

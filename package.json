@@ -1,8 +1,8 @@
 {
-  "name": "ispw-generate",
+  "name": "code-pipeline-generate",
   "version": "1.0.0",
-  "description": "GitHub action to execute a BMC Compuware ISPW generate",
-  "publisher": "BMC Compuware",
+  "description": "GitHub action to execute a BMC AMI DevX Workbench Code Pipeline generate",
+  "publisher": "BMC",
   "main": "./dist/index.js",
   "scripts": {
     "build": "ncc build index.js -o dist",
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/bmc-compuware/ispw-generate.git"
   },
-  "keywords": ["ISPW", "Compuware", "BMC", "generate", "ispw-generate"],
+  "keywords": ["ISPW", "Compuware", "BMC", "AMI", "DevX", "generate", "code-pipeline"],
   "author": "",
   "license": "MIT",
   "bugs": {
