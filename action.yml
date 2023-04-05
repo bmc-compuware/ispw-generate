@@ -1,5 +1,5 @@
 name: 'code-pipeline-generate'
-description: 'Run a mainframe generate using Code Pipeline'
+description: 'Run a mainframe generate using Code Pipeline.'
 branding:
   icon: play
   color: orange
