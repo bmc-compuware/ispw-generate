@@ -8,7 +8,7 @@ inputs:
     description: 'The URL to send requests to.'
     required: true
   ces_token:
-    description: 'The token to use when connecting to Code Pipeline through CES'
+    description: 'The token to use when connecting to Code Pipeline through CES.'
     required: true
   srid:
     description: 'The ID for the instance of Code Pipeline to connect to'
