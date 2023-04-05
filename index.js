@@ -29,7 +29,7 @@ try {
   const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
-        'Inputs required for code-pipeline-generate are missing. ' +
+        'Inputs required for Code Pipeline Generate are missing. ' +
       '\nSkipping the generate request....');
   }
 
