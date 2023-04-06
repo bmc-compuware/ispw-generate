@@ -1,20 +1,20 @@
-# code-pipeline-generate
+# Code Pipeline Generate
 
-The code-pipeline-generate action allows your GitHub Actions workflow to trigger a generate in your instance of BMC AMI DevX Code Pipeline(Code Pipeline) on the mainframe. This action can be used in scenarios where your mainframe source is stored in git, or when you want your GitHub Actions workflow to operate on source that is already stored in Code Pipeline.
+The Code Pipeline Generate action allows your GitHub Actions workflow to trigger a generate in your instance of BMC AMI DevX Code Pipeline(Code Pipeline) on the mainframe. This action can be used in scenarios where your mainframe source is stored in git, or when you want your GitHub Actions workflow to operate on source that is already stored in Code Pipeline.
 
 ## Templates
 Create a GitHub workflow file, for example, [ispw-sync-build-deploy.yml](.github/templates/ispw-sync-build-deploy.yml) the workflow is broken up into the following stages:
 - Checkout - checks out the source code.
-- Synchronize changeset to Code Pipeline - uses GitHub action code-pipeline-sync to perform GitHub to Code Pipeline synchronization.
-- Build Code Pipeline tasks - uses GitHub action code-pipeline-build to perform a build
-- Deploy Code Pipeline tasks - uses gitHub action code-pipeline-deploy to perform a deploy
+- Synchronize changeset to Code Pipeline - uses GitHub action Code Pipeline Sync to perform GitHub to Code Pipeline synchronization.
+- Build Code Pipeline tasks - uses GitHub action Code Pipeline Build to perform a build
+- Deploy Code Pipeline tasks - uses gitHub action Code Pipeline Deploy to perform a deploy
 
-Or if you prefer to use GitHub action code-pipeline-sync-local, you may specify the sync step. 
+Or if you prefer to use GitHub action Code Pipeline Sync Local, you may specify the sync step. 
 For example, [ispw-sync-local-generate-deploy.yml](.github/templates/ispw-sync-local-generate-deploy.yml) the workflow is broken up into the following stages :
 - Checkout - checks out the source code.
-- Synchronize changeset to Code Pipeline - uses GitHub action code-pipeline-sync-local to perform GitHub to Code Pipeline synchronization.
-- Generate Code Pipeline tasks - uses GitHub action code-pipeline-generate to perform a generate
-- Deploy Code Pipeline tasks - uses gitHub action code-pipeline-deploy to perform a deploy
+- Synchronize changeset to Code Pipeline - uses GitHub action Code Pipeline Sync Local to perform GitHub to Code Pipeline synchronization.
+- Generate Code Pipeline tasks - uses GitHub action Code Pipeline Generate to perform a generate
+- Deploy Code Pipeline tasks - uses gitHub action Code Pipeline Deploy to perform a deploy
 
 ## Example usage
 
@@ -142,7 +142,7 @@ On the New Secret page, paste the token that was copied earlier and click the Ad
 
 ### Fill in the workflow script
 
-Use the examples above to fill in a workflow script using the code-pipeline-generate action. Note that if you want the input assignment, level, and taskIds to be automatically picked up from the Code Pipeline synchronization with Git, you will need a synchronization step in you job, which will run before the generate.
+Use the examples above to fill in a workflow script using the Code Pipeline Generate action. Note that if you want the input assignment, level, and taskIds to be automatically picked up from the Code Pipeline synchronization with Git, you will need a synchronization step in you job, which will run before the generate.
 
 ### Troubleshooting
 
@@ -150,7 +150,7 @@ To enable debug logging in your GitHub actions workflow, see the guide [here](ht
 
 ### Developers
 
-For information about contributing to the code-pipeline-generate action, see [Developing on the code-pipeline-generate GitHub action](./CONTRIBUTING.md)
+For information about contributing to the Code Pipeline Generate action, see [Developing on the Code Pipeline Generate GitHub action](./CONTRIBUTING.md)
 
 ## See also
 - [License](LICENSE.txt)
