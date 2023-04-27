@@ -1,0 +1,34 @@
+#The following files will be ignored while doing fortify scan
+
+#folders to ignore
+logs
+test/workspace/**/
+lib-cov
+coverage
+node_modules
+media
+test
+
+
+**/*.project
+**/*.md
+**/*.bat
+**/*.png
+**/*.jpg
+**/*.svg
+**/*.properties
+**/*.classpath
+**/*.settings
+**/*cache
+**/*.eslintcache
+**/*.npm
+**/*.nyc_output
+**/*.lcov
+**/*.log
+**/*.yml
+
+
+target
+work
+.settings
+
