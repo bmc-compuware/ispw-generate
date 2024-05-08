@@ -12,7 +12,7 @@ const utils = require('@bmc-compuware/ispw-action-utilities');
 try {
   let buildParms;
   let inputs = ['generate_automatically', 'assignment_id', 'level', 'task_id', 'ces_url',
-    'ces_token', 'srid', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
+    'ces_token', 'certificate', 'srid', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
   inputs = utils.retrieveInputs(core, inputs);
   core.debug('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
 
@@ -39,8 +39,13 @@ try {
 
   const reqBodyObj = assembleRequestBodyObject(inputs.runtime_configuration,
       inputs.change_type, inputs.execution_status, inputs.auto_deploy);
+//--
 
-  utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
+      //make ces_token as passkey? and write fun to check what is passed and pass that value?
+  if(isAuthTokenOrCerti(inputs.ces_token, inputs.certificate))
+    {
+      //for token
+      utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
       .then((response) => {
         core.debug('Code Pipeline: received response body: ' +
          utils.convertObjectToJson(response.data));
@@ -64,6 +69,37 @@ try {
             core.debug(error.stack);
             core.setFailed(error.message);
           });
+    }else
+    {
+      //for certi 
+      utils.getHttpPostPromiseWithCert(reqUrl, inputs.certificate, inputs.host, inputs.port, reqBodyObj)
+      .then((response) => {
+        core.debug('Code Pipeline: received response body: ' +
+         utils.convertObjectToJson(response.data));
+        // generate could have passed or failed
+        setOutputs(core, response.data);
+        return handleResponseBody(response.data);
+      },
+      (error) => {
+        // there was a problem with the request to CES
+        if (error.response !== undefined) {
+          core.debug('Code Pipeline: received error code: ' + error.response.status);
+          core.debug('Code Pipeline: received error response body: ' +
+            utils.convertObjectToJson(error.response.data));
+          setOutputs(core, error.response.data);
+          throw new GenerateFailureException(error.response.data.message);
+        }
+        throw error;
+      })
+      .then(() => console.log('The generate request completed successfully.'),
+          (error) => {
+            core.debug(error.stack);
+            core.setFailed(error.message);
+          });
+    }
+  
+
+  //--
 
   // the following code will execute after the HTTP request was started,
   // but before it receives a response.
@@ -210,6 +246,46 @@ function handleResponseBody(responseBody) {
 }
 
 /**
+ * Checks which authentication method is used in workflow i.e. token or certi
+ * @param  {string} ces_token the ces_token for authentication
+ * @param  {string} certificate the certificate passed for authentication
+ * @return {boolean} which authentication is passed in workflow i.e token or certi
+ * true for token
+ * false for certi
+ */
+function isAuthTokenOrCerti(ces_token, certificate) {
+  const buildParms = {};
+  if (utils.stringHasContent(ces_token)) {
+    return true;
+  }else if(utils.stringHasContent(certificate))
+  {
+    return false;
+  } 
+}
+
+/**
+ * Gets a promise for sending an http POST request with certi
+ * @param {URL} requestUrl the URL to send hte request to
+ * @param {string} certificate the certificate to use during authentication
+ * @param {string} host the host 
+ * @param {string} port the port
+ * @param {*} requestBody the request body object
+ * @return {Promise} the Promise for the request
+ */
+/*function getHttpPostPromiseWithCert(requestUrl, certificate, host, port, requestBody) {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      //'authorization': token,
+      'cpwr_hci_host': host,
+      'cpwr_hci_port': port,
+      'javax.servlet.request.X509Certificate': certificate,
+    },
+  };
+  return axios.post(requestUrl.href, requestBody, options);
+}*/
+
+/**
  * Error to throw when not all the arguments have been specified for the action.
  * @param  {string} message the message associated with the error
  */
@@ -237,6 +313,8 @@ module.exports = {
   getGenerateAwaitUrlPath,
   assembleRequestBodyObject,
   handleResponseBody,
+  isAuthTokenOrCerti,
+  //getHttpPostPromiseWithCert,
   MissingArgumentException,
   GenerateFailureException,
 };
