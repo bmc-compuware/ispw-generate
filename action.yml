@@ -16,6 +16,12 @@ inputs:
   srid:
     description: 'The ID for the instance of Code Pipeline to connect to'
     required: true
+  host:
+    description: 'The host name for Code Pipeline connection'
+    required: true
+  port:
+    description: 'The port for Code Pipeline connection'
+    required: true
   runtime_configuration:
     description: 'The runtime configuration used when connecting to Code Pipeline'
     required: false

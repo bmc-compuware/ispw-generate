@@ -12,7 +12,7 @@ const utils = require('@bmc-compuware/ispw-action-utilities');
 try {
   let buildParms;
   let inputs = ['generate_automatically', 'assignment_id', 'level', 'task_id', 'ces_url',
-    'ces_token', 'certificate', 'srid', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
+    'ces_token', 'certificate', 'srid', 'host', 'port', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
   inputs = utils.retrieveInputs(core, inputs);
   core.debug('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
 
