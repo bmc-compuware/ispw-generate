@@ -9,10 +9,10 @@ inputs:
     required: true
   ces_token:
     description: 'The token to use when connecting to Code Pipeline through CES.'
-    required: ${{ !github.event.inputs.certificate}}
+    required: false
   certificate:
     description: 'The certificate used when connecting to Code Pipeline through CES.'
-    required: ${{ !github.event.inputs.ces_token}}
+    required: false
   srid:
     description: 'The ID for the instance of Code Pipeline to connect to'
     required: true
