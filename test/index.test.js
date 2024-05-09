@@ -66,7 +66,6 @@ describe('#getParmsFromInputs(inputAssignment, inputLevel, inputTaskId)', functi
     assert.strictEqual(output.releaseId, undefined);
     assert.deepStrictEqual(output.taskIds, ['task1', 'task2', 'task3', 'task4']);
   });
-
 });
 
 
@@ -339,3 +338,34 @@ describe('#handleResponseBody(responseBody)', function () {
     assert.strictEqual(output, responseBody);
   });
 });
+
+describe('#isAuthTokenOrCerti(cesToken, certificate)', function () {
+  it('should return undefined - null passed in', function () {
+
+    let output = index.isAuthTokenOrCerti(null, null);
+    assert.isNotNull(output);
+    assert.strictEqual(output, undefined);
+  });
+
+  it('should return true - token value passed in', function () {
+
+    let output = index.isAuthTokenOrCerti('abcToken', null);
+    assert.isNotNull(output);
+    assert.strictEqual(output, true);
+  });
+
+  it('should return false - certi value passed in', function () {
+
+    let output = index.isAuthTokenOrCerti(null, 'certiVal');
+    assert.isNotNull(output);
+    assert.strictEqual(output, false);
+  });
+
+  it('should return undefined - both empty value passed in', function () {
+
+    let output = index.isAuthTokenOrCerti('', '');
+    assert.isNotNull(output);
+    assert.strictEqual(output, undefined);
+  });
+});
+
