@@ -52,10 +52,6 @@ try {
   const host = hostAndPort[0];
   const port = hostAndPort[1];
 
-  core.info('srid is : ${srid}'); // -
-  core.info('host is : ${host}'); // -
-  core.info('port is : ${port}'); // -
-
   if (isAuthTokenOrCerti(inputs.ces_token, inputs.certificate)) {
     // for token
     utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)

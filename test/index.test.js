@@ -367,5 +367,12 @@ describe('#isAuthTokenOrCerti(cesToken, certificate)', function () {
     assert.isNotNull(output);
     assert.strictEqual(output, undefined);
   });
+
+  it('should return undefined - undefined passed in', function () {
+
+    let output = index.isAuthTokenOrCerti(undefined, undefined);
+    assert.isNotNull(output);
+    assert.strictEqual(output, undefined);
+  });
 });
 

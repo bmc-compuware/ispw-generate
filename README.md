@@ -49,7 +49,6 @@ jobs:
         with:
           ces_url: 'https://CES:48226/'
           ces_token: ${{ secrets.CES_TOKEN }}
-          certificate: ${{ secrets.certificate }}
           srid: 'host-37733'
           runtime_configuration: 'ISPW'
           generate_automatically: ${{ steps.sync.outputs.automaticBuildJson }}
@@ -57,7 +56,7 @@ jobs:
         run: echo "The number of generate failures is ${{ steps.generate.outputs.generate_failed_count }}"
 ```
 
-The following example will generate two specific Code Pipeline tasks within assignment PLAY000826 with CES_TOKEN
+The following example will generate two specific Code Pipeline tasks within assignment PLAY000826 using ces_token as authentication method.
 
 ``` yaml
 on: [push]
@@ -82,7 +81,7 @@ jobs:
         run: echo "The Code Pipeline set used for the generate is ${{ steps.generate.outputs.set_id }}"
 ```
 
-The following example will generate two specific Code Pipeline tasks within assignment PLAY000826 with certificate
+The following example will generate two specific Code Pipeline tasks within assignment PLAY000826 using certificate as authentication method.
 
 ``` yaml
 on: [push]
@@ -128,7 +127,7 @@ jobs:
 
 ## NOTE
 
-Users must pass one of the authentication method in workflow i.e CES_TOKEN or certificate
+Users must pass one of the authentication method in workflow i.e ces_token or certificate
 
 ## Outputs
 
