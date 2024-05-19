@@ -30,7 +30,8 @@ try {
   const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
-        'Inputs required for Code Pipeline Generate are missing. ' + 'Skipping the generate request....');
+        'Inputs required for Code Pipeline Generate are missing. ' +
+        'Skipping the generate request....');
   }
 
   const reqPath = getGenerateAwaitUrlPath(inputs.srid, buildParms);
@@ -282,35 +283,43 @@ function GenerateFailureException(message) {
 }
 GenerateFailureException.prototype = Object.create(Error.prototype);
 
+
+/**
+ * Test Fun
+ *
+ * @return {MissingArgumentException}
+ */
 function testFunction() {
   try {
-    let buildParms;
-    const inputs = '';
-
     throw new MissingArgumentException(
-        'Inputs required for Code Pipeline Generate are missing. ' + 'Skipping the generate request....');
+        'Inputs required for Code Pipeline Generate are missing. ' +
+        'Skipping the generate request....');
   } catch (error) {
     return error.message;
   }
 }
 
+/**
+ * test fun2
+ * @return {GenerateFailureException }
+ */
 function testFunction1() {
   try {
-    let buildParms;
-    const inputs = '';
-
     throw new GenerateFailureException('An error occurred while starting the generate');
   } catch (error) {
     return error.message;
   }
 }
 
+
+/**
+ * test fun
+ * @return {GenerateFailureException}
+ */
 function testFunction2() {
   try {
-    let buildParms;
-    const inputs = '';
-    error.response = 'abc';
-    error.data = 'xyz';
+    error.response = '';
+    error.data = '';
 
     throw new GenerateFailureException(error.response.data.message);
   } catch (error) {
