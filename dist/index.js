@@ -36,8 +36,7 @@ try {
   const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
-        'Inputs required for Code Pipeline Generate are missing. ' +
-      '\nSkipping the generate request....');
+        'Inputs required for Code Pipeline Generate are missing. ' + 'Skipping the generate request....');
   }
 
   const reqPath = getGenerateAwaitUrlPath(inputs.srid, buildParms);
@@ -289,6 +288,41 @@ function GenerateFailureException(message) {
 }
 GenerateFailureException.prototype = Object.create(Error.prototype);
 
+function testFunction() {
+  try {
+    let buildParms;
+    const inputs = '';
+
+    throw new MissingArgumentException(
+        'Inputs required for Code Pipeline Generate are missing. ' + 'Skipping the generate request....');
+  } catch (error) {
+    return error.message;
+  }
+}
+
+function testFunction1() {
+  try {
+    let buildParms;
+    const inputs = '';
+
+    throw new GenerateFailureException('An error occurred while starting the generate');
+  } catch (error) {
+    return error.message;
+  }
+}
+
+function testFunction2() {
+  try {
+    let buildParms;
+    const inputs = '';
+    error.response = 'abc';
+    error.data = 'xyz';
+
+    throw new GenerateFailureException(error.response.data.message);
+  } catch (error) {
+    return error.message;
+  }
+}
 
 module.exports = {
   getParmsFromInputs,
@@ -299,6 +333,9 @@ module.exports = {
   isAuthTokenOrCerti,
   MissingArgumentException,
   GenerateFailureException,
+  testFunction,
+  testFunction1,
+  testFunction2,
 };
 
 

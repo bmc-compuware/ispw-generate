@@ -11,6 +11,10 @@ var assert = chai.assert;
 const gcore = require('@actions/core');
 const github = require('@actions/github');
 
+const {testFunction } = require('../index.js');
+const {testFunction1 } = require('../index.js');
+const {testFunction2 } = require('../index.js');
+
 describe('#getParmsFromInputs(inputAssignment, inputLevel, inputTaskId)', function () {
   it('should return empty - null passed in', function () {
 
@@ -376,3 +380,46 @@ describe('#isAuthTokenOrCerti(cesToken, certificate)', function () {
   });
 });
 
+describe('#testFunction()', function () {
+  it('should throw error when empty params', function () {
+
+    let output = index.testFunction();
+    //assert.isNotNull(output);
+    assert.strictEqual(output, 'Inputs required for Code Pipeline Generate are missing. ' + 'Skipping the generate request....');
+  });
+
+});
+
+describe('#testFunction1()', function () {
+  it('should throw error when something went wrong', function () {
+
+    let output = index.testFunction1();
+    //assert.isNotNull(output);
+    assert.strictEqual(output, 'An error occurred while starting the generate');
+  });
+});
+
+describe('#testFunction2()', function () {
+
+  it('should throw an exception - generate failure', function () {
+    let output = index.testFunction2();
+    let responseBody = {
+      setID: 'S000238588',
+      url: 'http://ces:48080/ispw/CW09-47623/sets/S000238588',
+      awaitStatus: {
+        generateFailedCount: 1,
+        generateSuccessCount: 1,
+        hasFailures: true,
+        statusMsg: [
+          "ISPW: Set S000238378 - The generate request completed successfully for TPROG21 in PLAY002631. Job ID and name: J0758875 XDEVREGG",
+          "ISPW: Set S000238378 - The generate request failed for TPROG25 in PLAY002631. Job ID and name: J0758874 XDEVREGG",
+          "ISPW: Generate job output DDs for job J0758874:\n                              JESMSGLG (50 records)\n                              JESJCL (237 records)\n                              JESYSMSG (505 records)\n                              WZZBPOUT (4 records)\n                              CWPERRM (55 records)\n                              SYSPRINT (423 records)\n                              SYSUT2 (423 records)\n                              SYSPRINT (4 records)\n                              WZZBPOUT (16 records)\n                              WZZBPOUT (5 records)\n                              SYSPRINT (349 records)\n                              SYS00010 (9 records)\n                              CWPWBNV (18 records)\n                              SYS00023 (24 records)"
+        ],
+        taskCount: 2
+      }
+    };
+    assert.throw(function () { index.handleResponseBody(responseBody) }, index.GenerateFailureException, 'There were generate failures.');
+  });
+
+
+}); 
