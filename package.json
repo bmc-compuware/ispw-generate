@@ -1,6 +1,6 @@
 {
   "name": "code-pipeline-generate",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "GitHub action to execute a BMC AMI DevX Workbench Code Pipeline generate",
   "publisher": "BMC",
   "main": "./dist/index.js",
