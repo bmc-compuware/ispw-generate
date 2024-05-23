@@ -1,6 +1,6 @@
 {
   "name": "code-pipeline-generate",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "GitHub action to execute a BMC AMI DevX Workbench Code Pipeline generate",
   "publisher": "BMC",
   "main": "./dist/index.js",
@@ -15,7 +15,15 @@
     "type": "git",
     "url": "git+https://github.com/bmc-compuware/ispw-generate.git"
   },
-  "keywords": ["ISPW", "Compuware", "BMC", "AMI", "DevX", "generate", "code-pipeline"],
+  "keywords": [
+    "ISPW",
+    "Compuware",
+    "BMC",
+    "AMI",
+    "DevX",
+    "generate",
+    "code-pipeline"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {
@@ -23,9 +31,9 @@
   },
   "homepage": "https://github.com/bmc-compuware/ispw-generate#readme",
   "dependencies": {
-    "@actions/core": "^1.2.7",
+    "@actions/core": "^1.10.1",
     "@actions/github": "^4.0.0",
-    "@bmc-compuware/ispw-action-utilities": "^1.0.0",
+    "@bmc-compuware/ispw-action-utilities": "https://github.com/bmc-compuware/ispw-action-utilities.git#main",
     "path": "^0.12.7"
   },
   "devDependencies": {

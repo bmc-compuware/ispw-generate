@@ -12,7 +12,8 @@ const utils = require('@bmc-compuware/ispw-action-utilities');
 try {
   let buildParms;
   let inputs = ['generate_automatically', 'assignment_id', 'level', 'task_id', 'ces_url',
-    'ces_token', 'srid', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
+    'ces_token', 'certificate', 'srid', 'runtime_configuration', 'change_type',
+    'execution_status', 'auto_deploy'];
   inputs = utils.retrieveInputs(core, inputs);
   core.debug('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
 
@@ -30,7 +31,7 @@ try {
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
         'Inputs required for Code Pipeline Generate are missing. ' +
-      '\nSkipping the generate request....');
+        'Skipping the generate request....');
   }
 
   const reqPath = getGenerateAwaitUrlPath(inputs.srid, buildParms);
@@ -40,30 +41,64 @@ try {
   const reqBodyObj = assembleRequestBodyObject(inputs.runtime_configuration,
       inputs.change_type, inputs.execution_status, inputs.auto_deploy);
 
-  utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
-      .then((response) => {
-        core.debug('Code Pipeline: received response body: ' +
-         utils.convertObjectToJson(response.data));
-        // generate could have passed or failed
-        setOutputs(core, response.data);
-        return handleResponseBody(response.data);
-      },
-      (error) => {
+  // getting host port details from srid passed
+  const hostAndPort = inputs.srid.split('-');
+  const host = hostAndPort[0];
+  const port = hostAndPort[1];
+
+  if (isAuthTokenOrCerti(inputs.ces_token, inputs.certificate)) {
+    // for token
+    utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
+        .then((response) => {
+          core.debug('Code Pipeline: received response body: ' +
+        utils.convertObjectToJson(response.data));
+          // generate could have passed or failed
+          setOutputs(core, response.data);
+          return handleResponseBody(response.data);
+        },
+        (error) => {
         // there was a problem with the request to CES
-        if (error.response !== undefined) {
-          core.debug('Code Pipeline: received error code: ' + error.response.status);
-          core.debug('Code Pipeline: received error response body: ' +
-            utils.convertObjectToJson(error.response.data));
-          setOutputs(core, error.response.data);
-          throw new GenerateFailureException(error.response.data.message);
-        }
-        throw error;
-      })
-      .then(() => console.log('The generate request completed successfully.'),
-          (error) => {
-            core.debug(error.stack);
-            core.setFailed(error.message);
-          });
+          if (error.response !== undefined) {
+            core.debug('Code Pipeline: received error code: ' + error.response.status);
+            core.debug('Code Pipeline: received error response body: ' +
+          utils.convertObjectToJson(error.response.data));
+            setOutputs(core, error.response.data);
+            throw new GenerateFailureException(error.response.data.message);
+          }
+          throw error;
+        })
+        .then(() => console.log('The generate request completed successfully.'),
+            (error) => {
+              core.debug(error.stack);
+              core.setFailed(error.message);
+            });
+  } else {
+    // for certi
+    utils.getHttpPostPromiseWithCert(reqUrl, inputs.certificate, host, port, reqBodyObj)
+        .then((response) => {
+          core.debug('Code Pipeline: received response body: ' +
+       utils.convertObjectToJson(response.data));
+          // generate could have passed or failed
+          setOutputs(core, response.data);
+          return handleResponseBody(response.data);
+        },
+        (error) => {
+          // there was a problem with the request to CES
+          if (error.response !== undefined) {
+            core.debug('Code Pipeline: received error code: ' + error.response.status);
+            core.debug('Code Pipeline: received error response body: ' +
+          utils.convertObjectToJson(error.response.data));
+            setOutputs(core, error.response.data);
+            throw new GenerateFailureException(error.response.data.message);
+          }
+          throw error;
+        })
+        .then(() => console.log('The generate request completed successfully.'),
+            (error) => {
+              core.debug(error.stack);
+              core.setFailed(error.message);
+            });
+  }
 
   // the following code will execute after the HTTP request was started,
   // but before it receives a response.
@@ -210,6 +245,24 @@ function handleResponseBody(responseBody) {
 }
 
 /**
+ * Checks which authentication method is used in workflow i.e. token or certi
+ * @param  {string} cesToken the ces_token for authentication
+ * @param  {string} certificate the certificate passed for authentication
+ * @return {boolean} which authentication is passed in workflow i.e token or certi
+ * true for token
+ * false for certi
+ */
+function isAuthTokenOrCerti(cesToken, certificate) {
+  if (utils.stringHasContent(cesToken)) {
+    return true;
+  } else if (utils.stringHasContent(certificate)) {
+    return false;
+  } else {
+    return undefined;
+  }
+}
+
+/**
  * Error to throw when not all the arguments have been specified for the action.
  * @param  {string} message the message associated with the error
  */
@@ -231,12 +284,59 @@ function GenerateFailureException(message) {
 GenerateFailureException.prototype = Object.create(Error.prototype);
 
 
+/**
+ * Test Fun
+ *
+ * @return {MissingArgumentException}
+ */
+function testFunction() {
+  try {
+    throw new MissingArgumentException(
+        'Inputs required for Code Pipeline Generate are missing. ' +
+        'Skipping the generate request....');
+  } catch (error) {
+    return error.message;
+  }
+}
+
+/**
+ * test fun2
+ * @return {GenerateFailureException }
+ */
+function testFunction1() {
+  try {
+    throw new GenerateFailureException('An error occurred while starting the generate');
+  } catch (error) {
+    return error.message;
+  }
+}
+
+
+/**
+ * test fun
+ * @return {GenerateFailureException}
+ */
+function testFunction2() {
+  try {
+    error.response = '';
+    error.data = '';
+
+    throw new GenerateFailureException(error.response.data.message);
+  } catch (error) {
+    return error.message;
+  }
+}
+
 module.exports = {
   getParmsFromInputs,
   setOutputs,
   getGenerateAwaitUrlPath,
   assembleRequestBodyObject,
   handleResponseBody,
+  isAuthTokenOrCerti,
   MissingArgumentException,
   GenerateFailureException,
+  testFunction,
+  testFunction1,
+  testFunction2,
 };
