@@ -1,0 +1,58 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Main Script",
+        "skipFiles": ["<node_internals>/**"],
+        "program": "${workspaceFolder}/index.js",
+        "env": {
+          "INPUT_CES_URL": "https://vivek-ws:48226/",
+          "INPUT_CES_TOKEN": "4555eec3-47a6-4245-b9f1-0287a71962d8",
+          "INPUT_SRID": "cw09",
+          "INPUT_RUNTIME_CONFIGURATION": "TPTP",
+          "INPUT_ASSIGNMENT_ID": "TIMK031259",
+          "INPUT_LEVEL": "DEV1",
+          "INPUT_TASK_ID": "7E9A51997037"
+        }
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Tests",
+        "skipFiles": ["<node_internals>/**"],
+        "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+        "args": [
+          "--timeout",
+          "999999",
+          "--colors",
+          "${workspaceFolder}/test"
+        ],
+        "internalConsoleOptions": "openOnSessionStart"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Single Test",
+        "skipFiles": ["<node_internals>/**"],
+        "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+        "args": [
+          "--timeout",
+          "999999",
+          "--colors",
+          "--grep",
+          "${input:testName}",
+          "${workspaceFolder}/test"
+        ]
+      }
+    ],
+    "inputs": [
+      {
+        "id": "testName",
+        "type": "promptString",
+        "description": "Test name pattern to run",
+        "default": "getParmsFromInputs"
+      }
+    ]
+  }

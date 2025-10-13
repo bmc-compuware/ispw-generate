@@ -1,15 +1,18 @@
 {
   "name": "code-pipeline-generate",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "GitHub action to execute a BMC AMI DevX Workbench Code Pipeline generate",
   "publisher": "BMC",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "ncc build index.js -o dist",
-    "lint": "npx eslint ./**.js --fix",
+    "build": "ncc build index.js -o dist --source-map --license licenses.txt",
+    "lint": "npx eslint index.js test/**/*.js --fix",
+    "lint:check": "npx eslint index.js test/**/*.js",
     "test": "nyc --all=true --exclude=\"dist/**\" --exclude=\"coverage/**\" --exclude=\"test/**\" --reporter=json --reporter=text mocha",
-    "coverage": "nyc check-coverage --lines 60 --branches 75 --statements 60 --functions 60",
-    "check": "npm run lint && npm run build && npm run test && npm run coverage"
+    "test:watch": "mocha --watch",
+    "coverage": "nyc check-coverage --lines 65 --branches 71 --statements 65 --functions 75",
+    "coverage:report": "nyc report --reporter=html",
+    "check": "npm run lint:check && npm run build && npm run test && npm run coverage"
   },
   "repository": {
     "type": "git",

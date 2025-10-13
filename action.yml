@@ -61,5 +61,5 @@ outputs:
   output_json:
     description: 'the JSON output from build'
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'dist/index.js'
