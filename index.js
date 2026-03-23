@@ -27,7 +27,7 @@ try {
   }
   core.debug('Code Pipeline: parsed buildParms: ' + utils.convertObjectToJson(buildParms));
 
-  const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
+  const requiredFields = ['containerId', 'taskLevel'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
         'Inputs required for Code Pipeline Generate are missing. ' +
@@ -102,7 +102,9 @@ try {
 
   // the following code will execute after the HTTP request was started,
   // but before it receives a response.
-  console.log('Starting the generate process for task ' + buildParms.taskIds.toString());
+  if (buildParms.taskIds && buildParms.taskIds.length > 0) {
+    console.log('Starting the generate process for task ' + buildParms.taskIds.toString());
+  }
 } catch (error) {
   if (error instanceof MissingArgumentException) {
     // this would occur if there was nothing to load during the sync process
@@ -166,6 +168,7 @@ function setOutputs(core, responseBody) {
       core.setOutput('generate_success_count', responseBody.awaitStatus.generateSuccessCount);
       core.setOutput('has_failures', responseBody.awaitStatus.hasFailures);
       core.setOutput('task_count', responseBody.awaitStatus.taskCount);
+      core.setOutput('message', responseBody.awaitStatus.message);
     }
   }
 }
@@ -180,9 +183,11 @@ function setOutputs(core, responseBody) {
 function getGenerateAwaitUrlPath(srid, buildParms) {
   let tempUrlStr = `/ispw/${srid}/assignments/${buildParms.containerId}`;
   tempUrlStr = tempUrlStr.concat('/taskIds/generate-await?');
-  buildParms.taskIds.forEach((id) => {
-    tempUrlStr = tempUrlStr.concat(`taskId=${id}&`);
-  });
+  if (buildParms.taskIds && buildParms.taskIds.length > 0) {
+    buildParms.taskIds.forEach((id) => {
+      tempUrlStr = tempUrlStr.concat(`taskId=${id}&`);
+    });
+  }
   tempUrlStr = tempUrlStr.concat(`level=${buildParms.taskLevel}`);
   return tempUrlStr;
 }
