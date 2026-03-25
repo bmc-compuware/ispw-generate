@@ -11,6 +11,8 @@ const utils = require('@bmc-compuware/ispw-action-utilities');
 
 try {
   let buildParms;
+  let setUrl;
+  let setId;
   let inputs = ['generate_automatically', 'assignment_id', 'level', 'task_id', 'ces_url',
     'ces_token', 'certificate', 'srid', 'runtime_configuration', 'change_type',
     'execution_status', 'auto_deploy'];
@@ -67,11 +69,30 @@ try {
           }
           throw error;
         })
-        .then(() => console.log('The generate request completed successfully.'),
-            (error) => {
-              core.debug(error.stack);
-              core.setFailed(error.message);
-            });
+        .then((response) => {
+          console.log('The Generate request submitted successfully.');
+          if (inputs.execution_status === 'I' || inputs.execution_status === '') {
+            core.debug(
+                'Code Pipeline: Execution completed successfully.');
+            setUrl = response.url;
+            setId = response.setId;
+            if (setId) {
+              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate').then(async () => {
+                console.log('The generate process completed successfully.');
+                await utils.logStatusOfEachTaskFromSet(inputs.ces_url,
+                    setId, inputs.level, inputs.ces_token, inputs.srid,
+                    inputs.runtime_configuration).then((message) => {
+                  console.log(message);
+                  core.info(message);
+                });
+              });
+            }
+          }
+        },
+        (error) => {
+          core.debug(error.stack);
+          core.setFailed(error.message);
+        });
   } else {
     // for certi
     utils.getHttpPostPromiseWithCert(reqUrl, inputs.certificate, host, port, reqBodyObj)
@@ -93,17 +114,40 @@ try {
           }
           throw error;
         })
-        .then(() => console.log('The generate request completed successfully.'),
-            (error) => {
-              core.debug(error.stack);
-              core.setFailed(error.message);
-            });
+        .then((response) => {
+          console.log('The Generate request submitted successfully.');
+          if (inputs.execution_status === 'I' || inputs.execution_status === '') {
+            core.debug(
+                'Code Pipeline: Execution completed successfully.');
+            setUrl = response.url;
+            setId = response.setId;
+            if (setId) {
+              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate').then(async () => {
+                console.log('The generate process completed successfully.');
+                await utils.logStatusOfEachTaskFromSet(inputs.ces_url,
+                    setId, inputs.level, inputs.ces_token, inputs.srid,
+                    inputs.runtime_configuration).then((message) => {
+                  console.log(message);
+                  core.info(message);
+                });
+              });
+            }
+          }
+        },
+        (error) => {
+          core.debug(error.stack);
+          core.setFailed(error.message);
+        });
   }
 
   // the following code will execute after the HTTP request was started,
   // but before it receives a response.
   if (buildParms.taskIds && buildParms.taskIds.length > 0) {
     console.log('Starting the generate process for task ' + buildParms.taskIds.toString());
+  } else {
+    console.log('Starting the generate process assignment ' +
+        buildParms.containerId + ' at level ' +
+        buildParms.taskLevel);
   }
 } catch (error) {
   if (error instanceof MissingArgumentException) {
