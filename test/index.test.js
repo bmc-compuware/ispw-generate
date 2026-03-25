@@ -10,10 +10,129 @@ const chai = require('chai');
 var assert = chai.assert;
 const gcore = require('@actions/core');
 const github = require('@actions/github');
+const sinon = require('sinon');
+const actionUtils = require('@bmc-compuware/ispw-action-utilities');
 
 const {testFunction } = require('../index.js');
 const {testFunction1 } = require('../index.js');
 const {testFunction2 } = require('../index.js');
+
+describe('Generate Params retrieved from input ', () => {
+  let originalLog;
+  let logs = [];
+  const indexPath = require.resolve('../index');
+  beforeEach(() => {
+    originalLog = console.log;
+    console.log = (...args) => logs.push(args.join(' '));
+    process.env.INPUT_CES_URL= 'http://localhost:48226/';
+    process.env.INPUT_CES_TOKEN = 'e21fa565-7be8-486f-a234-427845a18975';
+    process.env.INPUT_SRID = 'cw09';
+    process.env.INPUT_RUNTIME_CONFIGURATION = 'TPTP';
+    process.env.INPUT_ASSIGNMENT_ID = 'ISP2000978';
+    process.env.INPUT_LEVEL = 'DEV1';
+    delete require.cache[indexPath];
+  });
+
+  afterEach(() => {
+    delete process.env.INPUT_ASSIGNMENT_ID;
+    delete process.env.INPUT_CES_TOKEN;
+    delete process.env.INPUT_CES_URL;
+    delete process.env.INPUT_LEVEL;
+    delete process.env.INPUT_RUNTIME_CONFIGURATION;
+    delete process.env.INPUT_SRID;
+    console.log = originalLog;
+    logs = [];
+    delete require.cache[indexPath];
+  });
+
+  it('should not read input from generate_automatically', () => {
+    const response = {
+      data: {
+        'setId': 'S000722300',
+        'url': 'http://ceslocation:48226/ispw/TPTP/sets/S000722300',
+        'awaitStatus': {
+          'generateFailedCount': 0,
+          'generateSuccessCount': 0,
+          'hasFailures': false,
+          'taskCount': 0,
+        },
+      },
+    };
+
+    sinon.stub(actionUtils, 'getHttpPostPromise').resolves(response);
+    sinon.stub(actionUtils, 'pollSetStatus').resolves();
+    require('../index.js');
+    assert.isNotFalse(logs.includes('Generate parameters are being retrieved from the inputs.'));
+  });
+});
+
+describe('Generate Params retrieved from generate_automatically ', () => {
+  let originalLog;
+  let logs = [];
+  const indexPath = require.resolve('../index');
+  beforeEach(() => {
+    originalLog = console.log;
+    console.log = (...args) => logs.push(args.join(' '));
+    process.env.INPUT_CES_URL= 'http://localhost:48226/';
+    process.env.INPUT_CES_TOKEN = 'e21fa565-7be8-486f-a234-427845a18975';
+    process.env.INPUT_SRID = 'cw09';
+    process.env.INPUT_RUNTIME_CONFIGURATION = 'TPTP';
+    process.env.INPUT_GENERATE_AUTOMATICALLY = '{"containerId":"ISP2000976",'+
+              '"releaseId":" ","taskLevel":"DEV1","taskIds":["7EA3934E8A20"]}';
+    delete require.cache[indexPath];
+  });
+
+  afterEach(() => {
+    delete process.env.INPUT_CES_TOKEN;
+    delete process.env.INPUT_CES_URL;
+    delete process.env.INPUT_RUNTIME_CONFIGURATION;
+    delete process.env.INPUT_SRID;
+    delete process.env.INPUT_GENERATE_AUTOMATICALLY;
+    console.log = originalLog;
+    logs = [];
+    delete require.cache[indexPath];
+  });
+
+  it('should read input from generate_automatically', () => {
+    require('../index.js');
+    assert.isNotFalse(logs.includes('Generate parameters are being '+
+      'retrieved from the generate_automatically input.'));
+  });
+});
+
+describe('Test with certificates ', () => {
+  let originalLog;
+  let logs = [];
+  const indexPath = require.resolve('../index');
+  beforeEach(() => {
+    originalLog = console.log;
+    console.log = (...args) => logs.push(args.join(' '));
+    process.env.INPUT_CES_URL= 'http://localhost:48226/';
+    process.env.INPUT_CERTIFICATE = 'e21fa565-7be8-486f-a234-427845a18975';
+    process.env.INPUT_SRID = 'cw09';
+    process.env.INPUT_RUNTIME_CONFIGURATION = 'TPTP';
+    process.env.INPUT_GENERATE_AUTOMATICALLY = '{"containerId":"ISP2000976",'+
+              '"releaseId":" ","taskLevel":"DEV1","taskIds":["7EA3934E8A20"]}';
+    delete require.cache[indexPath];
+  });
+
+  afterEach(() => {
+    delete process.env.INPUT_CERTIFICATE;
+    delete process.env.INPUT_CES_URL;
+    delete process.env.INPUT_RUNTIME_CONFIGURATION;
+    delete process.env.INPUT_SRID;
+    delete process.env.INPUT_GENERATE_AUTOMATICALLY;
+    console.log = originalLog;
+    logs = [];
+    delete require.cache[indexPath];
+  });
+
+  it('should read input from generate_automatically', () => {
+    require('../index.js');
+    assert.isNotFalse(logs.includes('Generate parameters are being '+
+      'retrieved from the generate_automatically input.'));
+  });
+});
 
 describe('#getParmsFromInputs(inputAssignment, inputLevel, inputTaskId)', function () {
   it('should return empty - null passed in', function () {
@@ -189,6 +308,15 @@ describe('#getGenerateAwaitUrlPath(srid, buildParms)', function () {
       taskIds: ['abc123', 'def456']
     });
     assert.strictEqual(output, '/ispw/SRID/assignments/container1/taskIds/generate-await?taskId=abc123&taskId=def456&level=DEV3');
+
+  });
+
+  it('should handle generate of all tasks in assignment at a specified level', function () {
+    let output = index.getGenerateAwaitUrlPath('SRID', {
+      containerId: 'container1',
+      taskLevel: 'DEV3'
+    });
+    assert.strictEqual(output, '/ispw/SRID/assignments/container1/taskIds/generate-await?level=DEV3');
 
   });
 });

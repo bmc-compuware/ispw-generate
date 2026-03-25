@@ -355,6 +355,7 @@ function testFunction1() {
  */
 function testFunction2() {
   try {
+    const error = {};
     error.response = '';
     error.data = '';
 
