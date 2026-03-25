@@ -79,7 +79,7 @@ try {
             if (setId) {
               utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate',
                   2000, 60000, inputs.level, inputs.srid,
-                  inputs.runtime_configuration, inputs.ces_url);
+                  inputs.runtime_configuration, inputs.ces_url, core);
             }
           }
         },
@@ -116,7 +116,9 @@ try {
             setUrl = response.url;
             setId = response.setId;
             if (setId) {
-              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate');
+              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate',
+                  2000, 60000, inputs.level, inputs.srid,
+                  inputs.runtime_configuration, inputs.ces_url, core);
             }
           }
         },
