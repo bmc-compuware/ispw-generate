@@ -33,7 +33,7 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.1",
-    "@bmc-compuware/ispw-action-utilities": "file:../ispw-action-utilities",
+    "@bmc-compuware/ispw-action-utilities": "https://github.com/bmc-compuware/ispw-action-utilities.git#main",
     "ncc": "^0.3.6",
     "path": "^0.12.7"
   },
