@@ -77,15 +77,7 @@ try {
             setUrl = response.url;
             setId = response.setId;
             if (setId) {
-              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate').then(async () => {
-                console.log('The generate process completed successfully.');
-                await utils.logStatusOfEachTaskFromSet(inputs.ces_url,
-                    setId, inputs.level, inputs.ces_token, inputs.srid,
-                    inputs.runtime_configuration).then((message) => {
-                  console.log(message);
-                  core.info(message);
-                });
-              });
+              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate');
             }
           }
         },
@@ -122,15 +114,7 @@ try {
             setUrl = response.url;
             setId = response.setId;
             if (setId) {
-              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate').then(async () => {
-                console.log('The generate process completed successfully.');
-                await utils.logStatusOfEachTaskFromSet(inputs.ces_url,
-                    setId, inputs.level, inputs.ces_token, inputs.srid,
-                    inputs.runtime_configuration).then((message) => {
-                  console.log(message);
-                  core.info(message);
-                });
-              });
+              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate');
             }
           }
         },
