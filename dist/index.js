@@ -286,7 +286,7 @@ async function pollSetStatus(url, setId, token, action, interval = 2000, timeout
  * @param {*} cesUrl
  */
 async function pollSetStatus(url, setId, token,
-    action, interval = 2000, timeout = 60000, level, srid, rtConfig, cesUrl) {
+    action, interval = 2000, timeout = 60000, level, srid, rtConfig, cesUrl, core) {
   const startTime = Date.now(); // Track the start time
   let approvalCount = 0;
   try {
@@ -350,7 +350,7 @@ async function pollSetStatus(url, setId, token,
         setStatus == SET_STATE_COMPLETE
       ) {
         console.log('Code Pipeline: ' + action + ' completed.');
-        if (level && srid && rtConfig && cesUrl) {
+        if (level && srid && rtConfig && cesUrl && core) {
           await logStatusOfEachTaskFromSet(cesUrl,
               setId, level, token, srid,
               rtConfig).then((message) => {
@@ -58635,7 +58635,7 @@ try {
             if (setId) {
               utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate',
                   2000, 60000, inputs.level, inputs.srid,
-                  inputs.runtime_configuration, inputs.ces_url);
+                  inputs.runtime_configuration, inputs.ces_url, core);
             }
           }
         },
@@ -58672,7 +58672,9 @@ try {
             setUrl = response.url;
             setId = response.setId;
             if (setId) {
-              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate');
+              utils.pollSetStatus(setUrl, setId, inputs.ces_token, 'Generate',
+                  2000, 60000, inputs.level, inputs.srid,
+                  inputs.runtime_configuration, inputs.ces_url, core);
             }
           }
         },
