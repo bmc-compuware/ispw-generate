@@ -1,6 +1,6 @@
 {
   "name": "code-pipeline-generate",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "GitHub action to execute a BMC AMI DevX Workbench Code Pipeline generate",
   "publisher": "BMC",
   "main": "./dist/index.js",
@@ -35,7 +35,7 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.1",
-    "@bmc-compuware/ispw-action-utilities": "github:bmc-compuware/ispw-action-utilities#ZENG-444743",    
+    "@bmc-compuware/ispw-action-utilities": "github:bmc-compuware/ispw-action-utilities",    
     "ncc": "^0.3.6",
     "path": "^0.12.7"
   },
