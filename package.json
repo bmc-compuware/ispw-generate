@@ -51,6 +51,7 @@
     "@vercel/ncc": "^0.38.4"
   },
   "overrides": {
+    "serialize-javascript": "7.0.5",
     "undici": "6.29.1"
   }
 }
